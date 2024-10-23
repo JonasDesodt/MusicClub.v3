@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
+using MusicClub.v3.SourceGenerators.Shared.Extensions;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Receivers
 {
@@ -13,6 +14,27 @@ namespace MusicClub.v3.SourceGenerators.Shared.Receivers
             if (syntaxNode is InterfaceDeclarationSyntax interfaceDeclartionSyntax)
             {
                 Interfaces.Add(interfaceDeclartionSyntax);
+            }
+        }
+
+        public IEnumerable<(InterfaceDeclarationSyntax, IEnumerable<string>)> GetModels(Compilation compilation, string attributeName)
+        {
+            foreach (var interfaceDeclarationSyntax in Interfaces)
+            {
+                var semanticModel = compilation.GetSemanticModel(interfaceDeclarationSyntax.SyntaxTree);
+                var symbol = semanticModel.GetDeclaredSymbol(interfaceDeclarationSyntax);
+                if (symbol is null)
+                {
+                    continue;
+                }
+
+                foreach (var attributeData in symbol.GetAttributes())
+                {
+                    if (attributeData.AttributeClass?.Name == attributeName)
+                    {
+                        yield return (interfaceDeclarationSyntax, attributeData.GetParamStringArrayValues());
+                    }
+                }
             }
         }
     }

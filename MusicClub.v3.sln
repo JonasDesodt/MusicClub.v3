@@ -3,15 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.Shared", "MusicClub.v3.SourceGenerators.Shared\MusicClub.v3.SourceGenerators.Shared.csproj", "{8580496D-11EC-421C-A696-3F195B932EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.Shared", "MusicClub.v3.SourceGenerators.Shared\MusicClub.v3.SourceGenerators.Shared.csproj", "{8580496D-11EC-421C-A696-3F195B932EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.Api", "MusicClub.v3.SourceGenerators.Api\MusicClub.v3.SourceGenerators.Api.csproj", "{AE81E511-0CB8-4E6A-913A-3532ADAC584F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.Api", "MusicClub.v3.SourceGenerators.Api\MusicClub.v3.SourceGenerators.Api.csproj", "{AE81E511-0CB8-4E6A-913A-3532ADAC584F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SourceGenerators", "SourceGenerators", "{16F9D407-A4E1-4ACB-B25D-2C30F13BB320}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.Api", "MusicClub.v3.Api\MusicClub.v3.Api.csproj", "{F9C315B7-97EF-4EA4-A9B6-D609073892F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Api", "MusicClub.v3.Api\MusicClub.v3.Api.csproj", "{F9C315B7-97EF-4EA4-A9B6-D609073892F8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{762366C1-DB70-4D32-9E90-BC223FD927F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dto", "Dto", "{FE93ED3E-CE19-43A7-A7A9-0A19659FDFEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Dto", "MusicClub.v3.Dto\MusicClub.v3.Dto.csproj", "{B5481C11-4D3F-4576-A1EC-344C49B1654D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FA818B2B-1F06-46CF-9E7C-431FDBD41B74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.DbServices", "MusicClub.v3.DbServices\MusicClub.v3.DbServices.csproj", "{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.Abstractions", "MusicClub.v3.Abstractions\MusicClub.v3.Abstractions.csproj", "{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.Abstractions", "MusicClub.v3.SourceGenerators.Abstractions\MusicClub.v3.SourceGenerators.Abstractions.csproj", "{55E65A68-CB81-47FC-A330-470AC17C6571}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +43,22 @@ Global
 		{F9C315B7-97EF-4EA4-A9B6-D609073892F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9C315B7-97EF-4EA4-A9B6-D609073892F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9C315B7-97EF-4EA4-A9B6-D609073892F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5481C11-4D3F-4576-A1EC-344C49B1654D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5481C11-4D3F-4576-A1EC-344C49B1654D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5481C11-4D3F-4576-A1EC-344C49B1654D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5481C11-4D3F-4576-A1EC-344C49B1654D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E65A68-CB81-47FC-A330-470AC17C6571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E65A68-CB81-47FC-A330-470AC17C6571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E65A68-CB81-47FC-A330-470AC17C6571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E65A68-CB81-47FC-A330-470AC17C6571}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +67,10 @@ Global
 		{8580496D-11EC-421C-A696-3F195B932EDB} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 		{AE81E511-0CB8-4E6A-913A-3532ADAC584F} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 		{F9C315B7-97EF-4EA4-A9B6-D609073892F8} = {762366C1-DB70-4D32-9E90-BC223FD927F2}
+		{B5481C11-4D3F-4576-A1EC-344C49B1654D} = {FE93ED3E-CE19-43A7-A7A9-0A19659FDFEF}
+		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
+		{55E65A68-CB81-47FC-A330-470AC17C6571} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28C5E559-5FFF-4ECF-A9D0-2FE3955A2E8F}

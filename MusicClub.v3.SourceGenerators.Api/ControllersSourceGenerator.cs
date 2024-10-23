@@ -1,6 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
+using MusicClub.v3.SourceGenerators.Shared.Constants;
+using MusicClub.v3.SourceGenerators.Shared.Extensions;
+using MusicClub.v3.SourceGenerators.Shared.Helpers;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
-using System;
+using MusicClub.v3.SourceGenerators.Shared.Strings;
 
 namespace MusicClub.v3.SourceGenerators.Api
 {
@@ -19,13 +22,17 @@ namespace MusicClub.v3.SourceGenerators.Api
                 return;
             }
 
-            foreach(var (classDeclarationSyntax, models) in receiver.GetModels(context.Compilation, $"{Constants.AttributesNamespace}.{Constants.GenerateControllersAttributeName}.{Constants.GenerateControllersAttributeName}({Constants.GenerateControllersAttributeParamsTypes})"))
+            foreach (var (classDeclarationSyntax, models) in receiver.GetModels(context.Compilation, Constants.GenerateControllersAttributeName))
             {
-                foreach(var model in models)
+                foreach (var model in models)
                 {
-                    context.AddSource($"{model}Controller{Constants.FileExtension}", $"namespace {Constants.ApiControllersNamespace} {{ public class {model}Controller : {Constants.ApiControllerName} {{ }} }}");
+                    var @namespace = context.GetNamespace(classDeclarationSyntax);
+                    var baseClass = context.GetClassname(classDeclarationSyntax);
+                    var baseClassTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(classDeclarationSyntax), NamingConventions.GetDto());
+                    
+                    context.AddSource($"{model}Controller{NamingConventions.FileExtension}", ClassStrings.GetControllerString(@namespace, model, baseClass, baseClassTypeParams));
                 }
-            }      
+            }
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
-using System.Linq;
-using System;
+using MusicClub.v3.SourceGenerators.Shared.Extensions;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Receivers
 {
@@ -18,28 +17,22 @@ namespace MusicClub.v3.SourceGenerators.Shared.Receivers
             }
         }
 
-        public IEnumerable<(ClassDeclarationSyntax, IEnumerable<string>)> GetModels(Compilation compilation, string attributeConstructorName)
+        public IEnumerable<(ClassDeclarationSyntax, IEnumerable<string>)> GetModels(Compilation compilation, string attributeName)
         {
             foreach (var classDeclarationSyntax in Classes)
             {
-                foreach (var attributeListSyntax in classDeclarationSyntax.AttributeLists)
+                var semanticModel = compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+                var classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax);
+                if (classSymbol is null)
                 {
-                    foreach (var attributeSyntax in attributeListSyntax.Attributes)
-                    {
-                        var semanticModel = compilation.GetSemanticModel(attributeSyntax.SyntaxTree);
-                        var attributeSymbol = semanticModel.GetSymbolInfo(attributeSyntax).Symbol;
+                    continue;
+                }
 
-                        if (attributeSymbol != null)
-                        {
-                            if (attributeSymbol.ToString() == attributeConstructorName)
-                            {
-                                yield return (classDeclarationSyntax,
-                                attributeSyntax.ArgumentList.Arguments
-                                .Select(a => a.Expression is LiteralExpressionSyntax literalExpression
-                                ? literalExpression.Token.ValueText
-                                : a?.ToString() ?? "unknown"));
-                            }
-                        }
+                foreach (var attributeData in classSymbol.GetAttributes())
+                {
+                    if (attributeData.AttributeClass?.Name == attributeName)
+                    {
+                        yield return (classDeclarationSyntax, attributeData.GetParamStringArrayValues());
                     }
                 }
             }
