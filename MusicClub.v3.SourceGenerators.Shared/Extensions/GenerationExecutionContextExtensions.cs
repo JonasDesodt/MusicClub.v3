@@ -1,8 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 {
@@ -22,7 +20,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             return namespaceSymbol.ToDisplayString();
         }
 
-        private static string GetClassname(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
+        private static string GetSyntaxNodeName(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
         {
             var semanticModel = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree);
             var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
@@ -36,9 +34,9 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             return GetNamespace(context, classDeclarationSyntax as SyntaxNode);
         }
 
-        public static string GetClassname(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
+        public static string GetClassName(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
         {
-            return GetClassname(context, classDeclarationSyntax as SyntaxNode);
+            return GetSyntaxNodeName(context, classDeclarationSyntax as SyntaxNode);
         }
 
         public static IEnumerable<string> GetTypeParameterNames(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
@@ -52,15 +50,31 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             }
         }
 
+        public static IEnumerable<ClassDeclarationSyntax> FilterClassesInGlobalNamespaceOnSuffix(this GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> classDeclarationSyntaxes, string suffix)
+        {
+            foreach(var classDeclarationSyntax in classDeclarationSyntaxes)
+            {
+                if (context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree).GetDeclaredSymbol(classDeclarationSyntax) is INamedTypeSymbol classSymbol)
+                {
+                    if (classSymbol.Name.EndsWith(suffix))
+                    {
+                        //if (classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.IsGlobalNamespace)
+                        //{
+                            yield return classDeclarationSyntax;
+                        //}
+                    }
+                }
+            }
+        }
 
         public static string GetNamespace(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
         {
             return GetNamespace(context, interfaceDeclarationSyntax as SyntaxNode);
         }
 
-        public static string GetClassname(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+        public static string GetInterfaceName(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
         {
-            return GetClassname(context, interfaceDeclarationSyntax as SyntaxNode);
+            return GetSyntaxNodeName(context, interfaceDeclarationSyntax as SyntaxNode);
         }
 
         public static IEnumerable<string> GetTypeParameterNames(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)

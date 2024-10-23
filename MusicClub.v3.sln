@@ -19,11 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Dto", "MusicCl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{FA818B2B-1F06-46CF-9E7C-431FDBD41B74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.DbServices", "MusicClub.v3.DbServices\MusicClub.v3.DbServices.csproj", "{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.DbServices", "MusicClub.v3.DbServices\MusicClub.v3.DbServices.csproj", "{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.Abstractions", "MusicClub.v3.Abstractions\MusicClub.v3.Abstractions.csproj", "{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Abstractions", "MusicClub.v3.Abstractions\MusicClub.v3.Abstractions.csproj", "{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.Abstractions", "MusicClub.v3.SourceGenerators.Abstractions\MusicClub.v3.SourceGenerators.Abstractions.csproj", "{55E65A68-CB81-47FC-A330-470AC17C6571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.Abstractions", "MusicClub.v3.SourceGenerators.Abstractions\MusicClub.v3.SourceGenerators.Abstractions.csproj", "{55E65A68-CB81-47FC-A330-470AC17C6571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.DbServices", "MusicClub.v3.SourceGenerators.DbServices\MusicClub.v3.SourceGenerators.DbServices.csproj", "{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{55E65A68-CB81-47FC-A330-470AC17C6571}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{55E65A68-CB81-47FC-A330-470AC17C6571}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{55E65A68-CB81-47FC-A330-470AC17C6571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,8 +75,9 @@ Global
 		{F9C315B7-97EF-4EA4-A9B6-D609073892F8} = {762366C1-DB70-4D32-9E90-BC223FD927F2}
 		{B5481C11-4D3F-4576-A1EC-344C49B1654D} = {FE93ED3E-CE19-43A7-A7A9-0A19659FDFEF}
 		{64B83ACE-4B9A-40CF-A578-2C6814EDA5DB} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
-		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
+		{36F3BF6B-22CB-4E5B-A231-7DEF68DDDAA9} = {FE93ED3E-CE19-43A7-A7A9-0A19659FDFEF}
 		{55E65A68-CB81-47FC-A330-470AC17C6571} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
+		{D2EA80F1-C1B4-4D1E-A335-7A18CFD6F80F} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28C5E559-5FFF-4ECF-A9D0-2FE3955A2E8F}

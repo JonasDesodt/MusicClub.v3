@@ -8,7 +8,7 @@ using MusicClub.v3.SourceGenerators.Shared.Strings;
 namespace MusicClub.v3.SourceGenerators.Api
 {
     [Generator]
-    public class ControllersSourceGenerator : ISourceGenerator
+    internal class ControllersSourceGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -27,10 +27,11 @@ namespace MusicClub.v3.SourceGenerators.Api
                 foreach (var model in models)
                 {
                     var @namespace = context.GetNamespace(classDeclarationSyntax);
-                    var baseClass = context.GetClassname(classDeclarationSyntax);
-                    var baseClassTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(classDeclarationSyntax), NamingConventions.GetDto());
+                    var baseClass = context.GetClassName(classDeclarationSyntax);
+                    var constructorParams = classDeclarationSyntax.GetSingleConstructorParameters();
+                    var baseClassTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(classDeclarationSyntax), NamingConventions.GetDtoSuffixes());
                     
-                    context.AddSource($"{model}Controller{NamingConventions.FileExtension}", ClassStrings.GetControllerString(@namespace, model, baseClass, baseClassTypeParams));
+                    context.AddSource($"{model}Controller{NamingConventions.FileExtension}", ClassStrings.GetControllerString(@namespace, model, constructorParams, baseClass, baseClassTypeParams));
                 }
             }
         }

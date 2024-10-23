@@ -27,8 +27,8 @@ namespace MusicClub.v3.SourceGenerators.Abstractions
                 foreach (var model in models)
                 {
                     var @namespace = context.GetNamespace(interfaceDeclarationSyntax);
-                    var baseInterface = context.GetClassname(interfaceDeclarationSyntax);
-                    var baseInterfceTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(interfaceDeclarationSyntax), NamingConventions.GetDto());
+                    var baseInterface = context.GetInterfaceName(interfaceDeclarationSyntax);
+                    var baseInterfceTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(interfaceDeclarationSyntax), NamingConventions.GetDtoSuffixes());
 
                     context.AddSource($"I{model}Service{NamingConventions.FileExtension}", InterfaceStrings.GetIServiceString(@namespace, model, baseInterface, baseInterfceTypeParams));
                 }

@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MusicClub.v3.Abstractions\MusicClub.v3.Abstractions.csproj" />
+		<ProjectReference Include="..\MusicClub.v3.DbServices\MusicClub.v3.DbServices.csproj" />
 		<ProjectReference Include="..\MusicClub.v3.SourceGenerators.Api\MusicClub.v3.SourceGenerators.Api.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 </Project>
