@@ -5,7 +5,7 @@ namespace MusicClub.v3.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [GenerateControllers("Person")]
+    [GenerateControllers("Artist", "Person")]
     public class ApiController<TDataRequest, TDataResponse, TFilterRequest, TFilterResponse>(IService<TDataRequest, TDataResponse, TFilterRequest, TFilterResponse> dbService) : ControllerBase
     {
         [HttpGet("{id:int}")]

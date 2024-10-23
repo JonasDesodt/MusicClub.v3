@@ -2,7 +2,7 @@
 
 namespace MusicClub.v3.Abstractions.Services
 {
-    [GenerateIServices("Person")]
+    [GenerateIServices("Artist", "Person")]
     public interface IService<TDataRequest, TDataResponse, TFilterRequest, TFilterResponse>
     {
         //Task<ServiceResult<TDataResult>> Create(TDataRequest request);

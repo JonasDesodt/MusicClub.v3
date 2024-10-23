@@ -23,6 +23,7 @@ namespace MusicClub.v3.SourceGenerators.DbServices
                 return;
             }
 
+            //also check if the correct interface is applied (& implemented)
             var dbServices = context.FilterClassesInGlobalNamespaceOnSuffix(receiver.Classes, NamingConventions.DbServiceSuffix);
 
             //todo => get the namespace dynamically

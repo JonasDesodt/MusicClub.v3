@@ -1,6 +1,6 @@
 ﻿namespace MusicClub.v3.DbServices
 {
-    public class PersonDbService : IPersonService
+    public class ArtistDbService : IArtistService
     {
     }
 }
