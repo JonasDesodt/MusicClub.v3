@@ -67,10 +67,10 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 {
                     if (classSymbol.Name.EndsWith(suffix))
                     {
-                        //if (classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.IsGlobalNamespace)
-                        //{
-                        yield return classDeclarationSyntax;
-                        //}
+                        if (/*classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.Name*/ context.GetNamespace(classDeclarationSyntax)== context.GetRootNamespace()/*&& classSymbol.ContainingNamespace.IsGlobalNamespace*/)
+                        {
+                            yield return classDeclarationSyntax;
+                        }
                     }
                 }
             }

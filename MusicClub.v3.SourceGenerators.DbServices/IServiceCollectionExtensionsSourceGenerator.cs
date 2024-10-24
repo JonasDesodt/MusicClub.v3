@@ -26,6 +26,13 @@ namespace MusicClub.v3.SourceGenerators.DbServices
                 return;
             }
 
+            var options = context.AnalyzerConfigOptions.GlobalOptions;
+            if (!options.TryGetValue("build_property.GenerateISourceCollectionExtensions", out var GenerateISourceCollectionExtensions) || !(bool.Parse(GenerateISourceCollectionExtensions) is true))
+            {
+                return;
+            }
+
+
             //also check if the correct interface is applied (& implemented)
             var dbServices = context.FilterClassesInGlobalNamespaceOnSuffix(receiver.Classes, NamingConventions.DbServiceSuffix);
 
@@ -48,7 +55,7 @@ namespace MusicClub.v3.SourceGenerators.DbServices
             stringBuilder.AppendLine($"\tpublic static partial class {Classname}");
             stringBuilder.AppendLine($"\t{{");
 
-            stringBuilder.AppendLine($"\t\tpublic static IServiceCollection AddDbServices(this IServiceCollection services)");
+            stringBuilder.AppendLine($"\t\tpublic static {FrameworkTypes.IServiceCollection} AddDbServices(this {FrameworkTypes.IServiceCollection} services)");
             stringBuilder.AppendLine($"\t\t{{");
             foreach (var dbService in dbServices)
             {
