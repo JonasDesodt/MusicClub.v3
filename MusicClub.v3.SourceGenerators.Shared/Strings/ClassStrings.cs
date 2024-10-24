@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Helpers;
@@ -48,7 +49,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             //todo: add constructor params dynamically, eg allow there to be none
             if (baseClassTypeParameterNames is null || baseClassTypeParameterNames.Count() == 0)
             {
-                
+
                 stringBuilder.AppendLine($"\tpublic class {model}Controller({dbService.Type} {dbService.Name}) : {baseClassName}({dbService.Name}) {{ }}");
             }
             else
@@ -61,7 +62,21 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
+        public static string GetDataResponseString(string @namespace, string className)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
 
 
+            stringBuilder.AppendLine($"\tpublic partial class {className}");
+            stringBuilder.AppendLine($"\t{{");
+
+            stringBuilder.AppendLine($"\t}}");
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
+        }
     }
 }

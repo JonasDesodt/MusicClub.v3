@@ -37,5 +37,26 @@ namespace MusicClub.v3.SourceGenerators.Shared.Receivers
                 }
             }
         }
+
+        public IEnumerable<(ClassDeclarationSyntax, AttributeData)> GetClassDeclarationSyntaxWithAttributeData(Compilation compilation, string attributeName)
+        {
+            foreach (var classDeclarationSyntax in Classes)
+            {
+                var semanticModel = compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+                var classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax);
+                if (classSymbol is null)
+                {
+                    continue;
+                }
+
+                foreach (var attributeData in classSymbol.GetAttributes())
+                {
+                    if (attributeData.AttributeClass?.Name == attributeName)
+                    {
+                        yield return (classDeclarationSyntax, attributeData);
+                    }
+                }
+            }
+        }
     }
 }

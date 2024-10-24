@@ -15,6 +15,6 @@ namespace MusicClub.v3.SourceGenerators.Shared.Constants
 
         public const string DbServiceSuffix = "DbService";
 
-        public static Regex IModelService { get; } = new Regex(@"^I.+Service$");
+        public static Regex IModelServicePattern { get; } = new Regex(@"^I.+Service$");
     }
 }

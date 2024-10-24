@@ -62,7 +62,7 @@ namespace MusicClub.v3.SourceGenerators.DbServices
                 var name = context.GetClassName(dbService); //todo => do this in execute method
 
                 //crash if there is more than one I{Model}Service found
-                var @interface = context.GetInterfacesWithPattern(dbService, NamingConventions.IModelService).Single().Name; //todo => do this in execute method
+                var @interface = context.GetInterfacesWithPattern(dbService, NamingConventions.IModelServicePattern).Single().Name; //todo => do this in execute method
 
                 stringBuilder.AppendLine($"\t\t\tservices.AddScoped<{@interface}, {name}>();");
             }

@@ -16,8 +16,10 @@
 
 	<PropertyGroup>
 		<GenerateISourceCollectionExtensions>true</GenerateISourceCollectionExtensions>
+		<!--<DatabaseServiceSuffix>DbService</DatabaseServiceSuffix>-->
 	</PropertyGroup>
 	<ItemGroup>
-		<CompilerVisibleProperty Include="GenerateISourceCollectionExtensions" />
+		<CompilerVisibleProperty Include="GenerateISourceCollectionExtensions"/>
+		<!--<CompilerVisibleProperty Include="DatabaseServiceSuffix"/>-->
 	</ItemGroup>
 </Project>
