@@ -1,4 +1,6 @@
-﻿namespace MusicClub.v3.SourceGenerators.Shared.Constants
+﻿using System.Text.RegularExpressions;
+
+namespace MusicClub.v3.SourceGenerators.Shared.Constants
 {
     public static class NamingConventions
     {
@@ -12,5 +14,7 @@
         public static string[] GetDtoSuffixes() => new string[] { DataRequestSuffix, DataResponseSuffix, FilterRequestSuffix, FilterResponseSuffix };
 
         public const string DbServiceSuffix = "DbService";
+
+        public static Regex IModelService { get; } = new Regex(@"^I.+Service$");
     }
 }

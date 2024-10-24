@@ -4,6 +4,7 @@ using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MusicClub.v3.SourceGenerators.DbServices
@@ -11,6 +12,8 @@ namespace MusicClub.v3.SourceGenerators.DbServices
     [Generator]
     internal class IServiceCollectionExtensionsSourceGenerator : ISourceGenerator
     {
+        private const string Classname = "IServiceCollectionExtensions";
+
         public void Initialize(GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(() => new ClassDeclarationSyntaxReceiver());
@@ -26,8 +29,13 @@ namespace MusicClub.v3.SourceGenerators.DbServices
             //also check if the correct interface is applied (& implemented)
             var dbServices = context.FilterClassesInGlobalNamespaceOnSuffix(receiver.Classes, NamingConventions.DbServiceSuffix);
 
-            //todo => get the namespace dynamically
-            context.AddSource("IServiceCollectionExtensions" + NamingConventions.FileExtension, GetIServiceCollectionExtensionsString("MusicClub.v3.DbServices.Extensions", dbServices, context));
+            var rootNamespace = context.GetRootNamespace();
+            if (rootNamespace is null)
+            {
+                return;
+            }
+
+            context.AddSource(Classname + NamingConventions.FileExtension, GetIServiceCollectionExtensionsString(rootNamespace + ".Extensions", dbServices, context));
         }
 
         private string GetIServiceCollectionExtensionsString(string @namespace, IEnumerable<ClassDeclarationSyntax> dbServices, GeneratorExecutionContext context)
@@ -37,7 +45,7 @@ namespace MusicClub.v3.SourceGenerators.DbServices
             stringBuilder.AppendLine($"namespace {@namespace}");
             stringBuilder.AppendLine($"{{");
 
-            stringBuilder.AppendLine($"\tpublic static partial class IServiceCollectionExtensions");
+            stringBuilder.AppendLine($"\tpublic static partial class {Classname}");
             stringBuilder.AppendLine($"\t{{");
 
             stringBuilder.AppendLine($"\t\tpublic static IServiceCollection AddDbServices(this IServiceCollection services)");
@@ -45,8 +53,9 @@ namespace MusicClub.v3.SourceGenerators.DbServices
             foreach (var dbService in dbServices)
             {
                 var name = context.GetClassName(dbService); //todo => do this in execute method
-                //todo => get the interface thats the class implements
-                var @interface = "I" + name.Replace(NamingConventions.DbServiceSuffix, "Service");
+
+                //crash if there is more than one I{Model}Service found
+                var @interface = context.GetInterfacesWithPattern(dbService, NamingConventions.IModelService).Single().Name; //todo => do this in execute method
 
                 stringBuilder.AppendLine($"\t\t\tservices.AddScoped<{@interface}, {name}>();");
             }

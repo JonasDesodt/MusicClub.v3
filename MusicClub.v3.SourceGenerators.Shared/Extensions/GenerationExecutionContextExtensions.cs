@@ -1,11 +1,20 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MusicClub.v3.SourceGenerators.Shared.Constants;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 {
     public static class GenerationExecutionContextExtensions
     {
+        public static string GetRootNamespace(this GeneratorExecutionContext context)
+        {
+            context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(GlobalOptions.RootNamespace, out var rootNamespace);
+
+            return rootNamespace;
+        }
+
         private static string GetNamespace(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
         {
             var semanticModel = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree);
@@ -52,7 +61,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 
         public static IEnumerable<ClassDeclarationSyntax> FilterClassesInGlobalNamespaceOnSuffix(this GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> classDeclarationSyntaxes, string suffix)
         {
-            foreach(var classDeclarationSyntax in classDeclarationSyntaxes)
+            foreach (var classDeclarationSyntax in classDeclarationSyntaxes)
             {
                 if (context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree).GetDeclaredSymbol(classDeclarationSyntax) is INamedTypeSymbol classSymbol)
                 {
@@ -60,12 +69,31 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                     {
                         //if (classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.IsGlobalNamespace)
                         //{
-                            yield return classDeclarationSyntax;
+                        yield return classDeclarationSyntax;
                         //}
                     }
                 }
             }
         }
+
+        public static IEnumerable<INamedTypeSymbol> GetInterfacesWithPattern(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax, Regex pattern)
+        {
+            foreach (var namedTypeSymbol in context.GetNamedTypeSymbol(classDeclarationSyntax).AllInterfaces)
+            {
+                if (pattern.IsMatch(namedTypeSymbol.Name)) 
+                {
+                    yield return namedTypeSymbol;
+                }
+            };
+        }
+
+        private static INamedTypeSymbol GetNamedTypeSymbol(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
+        {
+            var semanticModel = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+            return semanticModel.GetDeclaredSymbol(classDeclarationSyntax) as INamedTypeSymbol;
+
+        }
+
 
         public static string GetNamespace(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
         {
