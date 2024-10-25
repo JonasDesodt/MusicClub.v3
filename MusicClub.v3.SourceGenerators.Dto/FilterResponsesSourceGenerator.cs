@@ -1,19 +1,20 @@
 ﻿using Microsoft.CodeAnalysis;
-using MusicClub.v3.SourceGenerators.Shared.Receivers;
-using MusicClub.v3.SourceGenerators.Shared.Extensions;
-using System.Text.RegularExpressions;
 using MusicClub.v3.SourceGenerators.Shared.Constants;
+using MusicClub.v3.SourceGenerators.Shared.Extensions;
+using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using MusicClub.v3.SourceGenerators.Shared.Strings;
+using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Dto
 {
     [Generator]
-    internal class DataResponsesSourceGenerator : ISourceGenerator
+    internal class FilterResponsesSourceGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
             context.RegisterForSyntaxNotifications(() => new ClassDeclarationSyntaxReceiver());
         }
+
 
         public void Execute(GeneratorExecutionContext context)
         {
@@ -22,7 +23,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 return;
             }
 
-            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateDataResponse"))
+            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateFilterResponse"))
             {
                 if (!(attributeData.GetPropertyValue("ClassNamePattern") is string classNamePattern))
                 {
@@ -51,15 +52,18 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                //todo => add check on request class name if a match is found with the classNamePattern?
+
+                //todo => add check on request class name if a match is found with the classNamePattern? also check on namespace ?
                 //[GenerateDataResponse] w/ wrong pattern on ArtistFilterRequest gives a results, should not happen
 
                 var className = Regex.Replace(context.GetClassName(classDeclarationSyntax), classNamePattern, classNameReplacement);
                 var @namespace = Regex.Replace(context.GetNamespace(classDeclarationSyntax), namespacePattern, namespaceReplacement);
                 var properties = context.GetPropertySymbols(classDeclarationSyntax);
 
-                context.AddSource(className + NamingConventions.FileExtension, ClassStrings.GetResponseString(@namespace, className, properties.GetDataResponsePropertyStrings(foreignKeyPattern, foreignKeyReplacement)));
+                context.AddSource(className + NamingConventions.FileExtension, ClassStrings.GetResponseString(@namespace, className, properties.GetFilterResponsePropertyStrings(foreignKeyPattern, foreignKeyReplacement)));
             }
         }
+
+
     }
 }

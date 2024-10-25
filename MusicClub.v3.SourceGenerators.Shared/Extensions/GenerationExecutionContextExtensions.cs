@@ -59,6 +59,12 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             }
         }
 
+        public static IEnumerable<IPropertySymbol> GetPropertySymbols(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
+        {           
+            return context.GetNamedTypeSymbol(classDeclarationSyntax).GetMembers().OfType<IPropertySymbol>();
+        }
+
+        //var classProperties = classSymbol.GetMembers().OfType<IPropertySymbol>();
         public static IEnumerable<ClassDeclarationSyntax> FilterClassesInGlobalNamespaceOnSuffix(this GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> classDeclarationSyntaxes, string suffix)
         {
             foreach (var classDeclarationSyntax in classDeclarationSyntaxes)

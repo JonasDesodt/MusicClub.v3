@@ -1,12 +1,15 @@
 ﻿namespace MusicClub.v3.Dto.SourceGeneratorAttributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     internal class GenerateDataResponse : Attribute 
     {
-        public const string ClassNamePattern = @"(?<=\S)DataRequest(?!.+DataRequest)";
-        public const string ClassNameReplacement = "DataResponse";
+        public const string ClassNamePattern = @$"(?<=\S){GeneratorConstants.Data}{GeneratorConstants.Request}(?!.+{GeneratorConstants.Data}{GeneratorConstants.Request})";
+        public const string ClassNameReplacement = GeneratorConstants.Data + GeneratorConstants.Response;
 
-        public const string NamespacePattern = @"(?<=\S)Request(?!.+Request)";
-        public const string NamespaceReplacement = "Response";
+        public const string NamespacePattern = @$"(?<=\S){GeneratorConstants.Request}(?!.+{GeneratorConstants.Request})";
+        public const string NamespaceReplacement = GeneratorConstants.Response;
+
+        public const string ForeignKeyPattern = @$"(?<=\S){GeneratorConstants.Id}(?!.+{GeneratorConstants.Id})";
+        public const string ForeignKeyReplacement = ClassNameReplacement;
     }
 }
