@@ -130,7 +130,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             stringBuilder.AppendLine($"\t{{");
 
             stringBuilder.Append($"\t\tpublic static {responseTypeName} ToResponse(this {requestTypeName} request");
-            if(additionalProperties.Count() > 0)
+            if (additionalProperties.Count() > 0)
             {
                 stringBuilder.Append($", {string.Join(", ", additionalProperties.Select(x => x + "? " + x.ConvertFirstLetterToLowerCase()))}");
             }
@@ -144,12 +144,105 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
                 stringBuilder.AppendLine($"\t\t\t\t{property} = request.{property},");
             }
 
-            foreach(var property in additionalProperties)
+            foreach (var property in additionalProperties)
             {
                 stringBuilder.AppendLine($"\t\t\t\t{property} = {property.ConvertFirstLetterToLowerCase()},");
             }
 
             stringBuilder.AppendLine($"\t\t\t}};");
+            stringBuilder.AppendLine($"\t\t}}");
+
+            stringBuilder.AppendLine($"\t}}");
+
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
+        }
+
+        public static string GetToQueryStringExtensionString(string @namespace, string requestExtensionsClassName, string requestTypeName, IEnumerable<IPropertySymbol> properties)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendNullable();
+
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
+
+            stringBuilder.AppendLine($"\tpublic static partial class {requestExtensionsClassName}");
+            stringBuilder.AppendLine($"\t{{");
+
+            stringBuilder.AppendLine($"\t\tpublic static string ToQueryString(this {requestTypeName} filter)");
+            stringBuilder.AppendLine($"\t\t{{");
+
+            stringBuilder.AppendLine($"\t\t\tvar stringBuilder = new StringBuilder();");
+            stringBuilder.AppendLine();
+
+            foreach (var property in properties)
+            {
+                var name = property.Name;
+
+                if (property.Type.NullableAnnotation is NullableAnnotation.Annotated)
+                {
+                    stringBuilder.AppendLine($"\t\t\tif(filter.{name} is not null)");
+                    stringBuilder.AppendLine($"\t\t\t{{");
+                    stringBuilder.AppendLine($"\t\t\t\tstringBuilder.Append($\"&{name}={{filter.{name}}}\");");
+                    stringBuilder.AppendLine($"\t\t\t}}");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"\t\t\t\tstringBuilder.Append($\"&{name}={{filter.{name}}}\");");
+                }
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine($"\t\t\treturn stringBuilder.ToString();");
+
+            stringBuilder.AppendLine($"\t\t}}");
+
+            stringBuilder.AppendLine($"\t}}");
+
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
+        }
+
+        public static string GetDataRequestToModelString(string @namespace, string @classname, string modelType, IEnumerable<string> modelProperties, IEnumerable<string> excludedModelProperties, string dataRequestType, string created, string updated)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendNullable();
+
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
+
+            stringBuilder.AppendLine($"\tpublic static partial class {@classname}");
+            stringBuilder.AppendLine($"\t{{");
+
+            stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} dataRequest)");
+            stringBuilder.AppendLine($"\t\t{{");
+
+            if (modelProperties.Any(x => x == created || x == updated))
+            {
+                stringBuilder.AppendLine($"\t\t\tvar now = DateTime.UtcNow;");
+                stringBuilder.AppendLine();
+            }
+
+            stringBuilder.AppendLine($"\t\t\treturn new {modelType}");
+            stringBuilder.AppendLine($"\t\t\t{{");     
+
+            foreach (var property in modelProperties.Where(x => !excludedModelProperties.Contains(x)))
+            {
+                if (property == created || property == updated)
+                {
+                    stringBuilder.AppendLine($"\t\t\t\t{property} = now,");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"\t\t\t\t{property} = dataRequest.{property},");
+                }
+            }
+
+            stringBuilder.AppendLine($"\t\t\t}}");
             stringBuilder.AppendLine($"\t\t}}");
 
             stringBuilder.AppendLine($"\t}}");

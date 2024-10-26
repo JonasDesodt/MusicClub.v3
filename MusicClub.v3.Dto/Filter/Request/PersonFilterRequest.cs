@@ -4,6 +4,7 @@ namespace MusicClub.v3.Dto.Filter.Request
 {
     [GenerateFilterResponse]
     [GenerateFilterMappers]
+    [GenerateFilterRequestExtensions]
     public class PersonFilterRequest
     {
         public string? Firstname { get; set; }

@@ -11,6 +11,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\MusicClub.v3.Abstractions\MusicClub.v3.Abstractions.csproj" />
+		<ProjectReference Include="..\MusicClub.v3.DbCore\MusicClub.v3.DbCore.csproj" />
 		<ProjectReference Include="..\MusicClub.v3.SourceGenerators.DbServices\MusicClub.v3.SourceGenerators.DbServices.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
@@ -19,7 +20,7 @@
 		<!--<DatabaseServiceSuffix>DbService</DatabaseServiceSuffix>-->
 	</PropertyGroup>
 	<ItemGroup>
-		<CompilerVisibleProperty Include="GenerateISourceCollectionExtensions"/>
+		<CompilerVisibleProperty Include="GenerateISourceCollectionExtensions" />
 		<!--<CompilerVisibleProperty Include="DatabaseServiceSuffix"/>-->
 	</ItemGroup>
 </Project>

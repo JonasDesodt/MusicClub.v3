@@ -4,6 +4,7 @@ namespace MusicClub.v3.Dto.Filter.Request
 {
     [GenerateFilterResponse]
     [GenerateFilterMappers]
+    [GenerateFilterRequestExtensions]
     public class ArtistFilterRequest
     {
         public string? Alias { get; set; }

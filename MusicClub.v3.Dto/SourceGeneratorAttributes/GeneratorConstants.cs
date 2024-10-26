@@ -8,5 +8,6 @@
         public const string Request = "Request";
         public const string Response = "Response";
         public const string Extensions = "Extensions";
+        public const string Mappers = "Mappers";
     }
 }
