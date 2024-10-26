@@ -84,7 +84,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
-        public static string GetResponseToRequestMapperString(string @namespace, string responseExtensionsClassName, string responseTypeName, string requestTypeName, IEnumerable<IPropertySymbol> classProperties)   
+        public static string GetResponseToRequestMapperString(string @namespace, string responseExtensionsClassName, string responseTypeName, string requestTypeName, IEnumerable<IPropertySymbol> classProperties)
         {
             var stringBuilder = new StringBuilder();
 
@@ -117,38 +117,46 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
-        public string GetRequestToResponseString()
+        public static string GetRequestToResponseString(string @namespace, string requestExtensionsClassName, string requestTypeName, string responseTypeName, IEnumerable<string> properties, IEnumerable<string> additionalProperties)
         {
-            return "";
-            //builder.Append($"\t\tpublic static {resultClassName} ToResult(this {requestClassName} request");
+            var stringBuilder = new StringBuilder();
 
-            ////TODO: only loop once over the classProperties
+            stringBuilder.AppendNullable();
 
-            //foreach (var property in classProperties)
-            //{
-            //    if ((!property.Name.Equals("Id")) && property.Name.EndsWith("Id"))
-            //    {
-            //        builder.Append($", {property.Name.Replace("Id", "Result")}? {ConvertFirstLetterToLowerCase(property.Name.Replace("Id", "Result"))} = null");
-            //    }
-            //}
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
 
-            //builder.Append($")");
-            //builder.AppendLine($"\n\t\t{{");
-            //builder.AppendLine($"\t\t\treturn new {resultClassName}");
-            //builder.AppendLine($"\t\t\t{{");
+            stringBuilder.AppendLine($"\tpublic static partial class {requestExtensionsClassName}");
+            stringBuilder.AppendLine($"\t{{");
 
-            //foreach (var property in classProperties)
-            //{
-            //    builder.AppendLine($"\t\t\t\t{property.Name} = request.{property.Name},");
+            stringBuilder.Append($"\t\tpublic static {responseTypeName} ToResponse(this {requestTypeName} request");
+            if(additionalProperties.Count() > 0)
+            {
+                stringBuilder.Append($", {string.Join(", ", additionalProperties.Select(x => x + "? " + x.ConvertFirstLetterToLowerCase()))}");
+            }
+            stringBuilder.Append($")");
+            stringBuilder.AppendLine($"\n\t\t{{");
+            stringBuilder.AppendLine($"\t\t\treturn new {responseTypeName}");
+            stringBuilder.AppendLine($"\t\t\t{{");
 
-            //    if ((!property.Name.Equals("Id")) && property.Name.EndsWith("Id"))
-            //    {
-            //        builder.AppendLine($"\t\t\t\t{property.Name.Replace("Id", "Result")} = {ConvertFirstLetterToLowerCase(property.Name.Replace("Id", "Result"))},");
-            //    }
-            //}
+            foreach (var property in properties)
+            {
+                stringBuilder.AppendLine($"\t\t\t\t{property} = request.{property},");
+            }
 
-            //builder.AppendLine($"\t\t\t}};");
-            //builder.AppendLine($"\t\t}}");
+            foreach(var property in additionalProperties)
+            {
+                stringBuilder.AppendLine($"\t\t\t\t{property} = {property.ConvertFirstLetterToLowerCase()},");
+            }
+
+            stringBuilder.AppendLine($"\t\t\t}};");
+            stringBuilder.AppendLine($"\t\t}}");
+
+            stringBuilder.AppendLine($"\t}}");
+
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
         }
     }
 }

@@ -12,7 +12,12 @@
         public const string ClassNameReplacement = Response;
         public const string ClassNameSuffix = GeneratorConstants.Extensions;
 
+        public const string ForeignKeyReplacePattern = @$"(?<=\S){GeneratorConstants.Id}(?!.+{GeneratorConstants.Id})";
+        public const string ForeignKeyReplacement = GeneratorConstants.Data + ClassNameReplacement;
+
         public const string NamespaceReplacePattern = @$"(?<=\S){GeneratorConstants.Filter}\.{Request}(?!.+{GeneratorConstants.Filter}\.{Request})";
         public const string NamespaceReplacement = GeneratorConstants.Extensions + "." + GeneratorConstants.Filter;
+
+
     }
 }

@@ -4,6 +4,8 @@ using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using MusicClub.v3.SourceGenerators.Shared.Strings;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Dto
@@ -54,7 +56,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                var filterRequestExtensionsClassname = filterRequestTypeName + classNameSuffix;
+                var filterRequestExtensionsClassName = filterRequestTypeName + classNameSuffix;
                 var filterResponseExtensionsClassName = filterResponseTypeName + classNameSuffix;
 
                 if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
@@ -84,7 +86,19 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 var filterResponseExtensionsNamespace = baseNamespace + "." + response;
                 var properties = context.GetPropertySymbols(requestClassDeclarationSyntax);
 
-                context.AddSource(filterRequestExtensionsClassname + NamingConventions.FileExtension, "//" + filterRequestExtensionsNamespace);
+                if (!(attributeData.GetPropertyValue("ForeignKeyReplacePattern") is string foreignKeyReplacePattern))
+                {
+                    continue;
+                }
+                if (!(attributeData.GetPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
+                {
+                    continue;
+                }
+
+                var propertyNames = properties.Select(p => p.Name);
+                var additionalPropertyNames = propertyNames.ReplaceMatches(foreignKeyReplacePattern, foreignKeyReplacement);
+
+                context.AddSource(filterRequestExtensionsClassName + NamingConventions.FileExtension, ClassStrings.GetRequestToResponseString(filterRequestExtensionsNamespace, filterRequestExtensionsClassName, filterRequestTypeName, filterResponseTypeName, propertyNames, additionalPropertyNames));
                 context.AddSource(filterResponseExtensionsClassName + NamingConventions.FileExtension, ClassStrings.GetResponseToRequestMapperString(filterResponseExtensionsNamespace, filterResponseExtensionsClassName, filterResponseTypeName, filterRequestTypeName, properties));
             }
         }

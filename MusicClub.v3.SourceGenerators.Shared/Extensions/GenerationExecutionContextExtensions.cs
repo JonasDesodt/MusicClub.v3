@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MusicClub.v3.SourceGenerators.Shared.Constants;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Extensions
@@ -60,9 +61,29 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
         }
 
         public static IEnumerable<IPropertySymbol> GetPropertySymbols(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
-        {           
+        {
             return context.GetNamedTypeSymbol(classDeclarationSyntax).GetMembers().OfType<IPropertySymbol>();
         }
+        public static IEnumerable<string> GetPropertySymbolNames(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
+        {
+            return context.GetPropertySymbols(classDeclarationSyntax).Select(symbol => symbol.Name);
+        }
+        //public static IEnumerable<string> ReplacePropertySymbolNames(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax, IDictionary<string, string> replacementPatterns)
+        //{
+        //    foreach (var propertySymbol in context.GetPropertySymbols(classDeclarationSyntax))
+        //    {
+        //        foreach (var replacementPattern in replacementPatterns)
+        //        {
+        //            var regex = new Regex(replacementPattern.Value);
+        //            if (regex.TryReplace(propertySymbol.Name, replacementPattern.Key, out string name))
+        //            {
+        //                yield return name;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
+
 
         //var classProperties = classSymbol.GetMembers().OfType<IPropertySymbol>();
         public static IEnumerable<ClassDeclarationSyntax> FilterClassesInGlobalNamespaceOnSuffix(this GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> classDeclarationSyntaxes, string suffix)
@@ -73,7 +94,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 {
                     if (classSymbol.Name.EndsWith(suffix))
                     {
-                        if (/*classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.Name*/ context.GetNamespace(classDeclarationSyntax)== context.GetRootNamespace()/*&& classSymbol.ContainingNamespace.IsGlobalNamespace*/)
+                        if (/*classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.Name*/ context.GetNamespace(classDeclarationSyntax) == context.GetRootNamespace()/*&& classSymbol.ContainingNamespace.IsGlobalNamespace*/)
                         {
                             yield return classDeclarationSyntax;
                         }
@@ -86,7 +107,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
         {
             foreach (var namedTypeSymbol in context.GetNamedTypeSymbol(classDeclarationSyntax).AllInterfaces)
             {
-                if (pattern.IsMatch(namedTypeSymbol.Name)) 
+                if (pattern.IsMatch(namedTypeSymbol.Name))
                 {
                     yield return namedTypeSymbol;
                 }
