@@ -142,5 +142,20 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 }
             }
         }
+
+        public static IEnumerable<IPropertySymbol> GetInterfaceProperties(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclaration)
+        {
+            // Get the symbol representing the class
+              var namedTypeSymbol = context.GetNamedTypeSymbol(classDeclaration);
+            // Enumerate through all implemented interfaces
+            foreach (var interfaceSymbol in namedTypeSymbol.AllInterfaces) //todo => limit to the iModel? 
+            {
+                // Get all members of the interface and filter to properties
+                foreach (var member in interfaceSymbol.GetMembers().OfType<IPropertySymbol>())
+                {
+                    yield return member;
+                }
+            }
+        }
     }
 }

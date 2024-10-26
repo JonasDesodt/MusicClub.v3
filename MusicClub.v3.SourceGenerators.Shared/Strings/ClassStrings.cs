@@ -206,7 +206,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
-        public static string GetDataRequestToModelString(string @namespace, string @classname, string modelType, IEnumerable<string> modelProperties, IEnumerable<string> excludedModelProperties, string dataRequestType, string created, string updated)
+        public static string GetIModelToModelString(string @namespace, string iModel, string modelType, IEnumerable<string> modelProperties, IEnumerable<string> additionalModelProperties, string dataRequestType, string created, string updated)
         {
             var stringBuilder = new StringBuilder();
 
@@ -215,22 +215,26 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             stringBuilder.AppendLine($"namespace {@namespace}");
             stringBuilder.AppendLine($"{{");
 
-            stringBuilder.AppendLine($"\tpublic static partial class {@classname}");
+            stringBuilder.AppendLine($"\tpublic static partial class {iModel}");
             stringBuilder.AppendLine($"\t{{");
 
-            stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} dataRequest)");
+            stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} model)");
             stringBuilder.AppendLine($"\t\t{{");
 
-            if (modelProperties.Any(x => x == created || x == updated))
+            if (additionalModelProperties.Any(x => x == created || x == updated))
             {
                 stringBuilder.AppendLine($"\t\t\tvar now = DateTime.UtcNow;");
                 stringBuilder.AppendLine();
             }
 
             stringBuilder.AppendLine($"\t\t\treturn new {modelType}");
-            stringBuilder.AppendLine($"\t\t\t{{");     
+            stringBuilder.AppendLine($"\t\t\t{{");
 
-            foreach (var property in modelProperties.Where(x => !excludedModelProperties.Contains(x)))
+            foreach (var property in modelProperties)
+            {
+                stringBuilder.AppendLine($"\t\t\t\t{property} = model.{property},");
+            }
+            foreach (var property in additionalModelProperties)
             {
                 if (property == created || property == updated)
                 {
@@ -238,11 +242,11 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
                 }
                 else
                 {
-                    stringBuilder.AppendLine($"\t\t\t\t{property} = dataRequest.{property},");
+                    stringBuilder.AppendLine($"\t\t\t\t{property} = model.{property},");
                 }
             }
 
-            stringBuilder.AppendLine($"\t\t\t}}");
+            stringBuilder.AppendLine($"\t\t\t}};");
             stringBuilder.AppendLine($"\t\t}}");
 
             stringBuilder.AppendLine($"\t}}");

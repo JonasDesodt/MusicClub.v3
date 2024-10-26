@@ -1,5 +1,5 @@
-﻿namespace MusicClub.v3.DbCore.Interfaces
-{
+﻿namespace MusicClub.v3.IModels
+{ 
     public interface IPerson
     {
         string Firstname { get; set; }

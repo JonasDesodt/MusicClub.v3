@@ -2,8 +2,8 @@
 
 namespace MusicClub.v3.DbCore.Models
 {
-    //[GenerateDataRequestMappers(excludeProperties: ["Id", "Artists"])]
-    public class Person
+    [GenerateIModelMappers("Created", "Updated")]
+    public class Person : IPerson
     {
         public int Id { get; set; }
 

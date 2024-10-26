@@ -4,12 +4,13 @@ using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using MusicClub.v3.SourceGenerators.Shared.Strings;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.DbCore
 {
     [Generator]
-    internal class DataRequestMappersSourceGenerator : ISourceGenerator
+    internal class IModelMappersSourceGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -22,16 +23,20 @@ namespace MusicClub.v3.SourceGenerators.DbCore
             {
                 return;
             }
-            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateDataRequestMappers"))
+            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateIModelMappers"))
             {
                 var modelType = context.GetClassName(classDeclarationSyntax);
 
-                if (!(attributeData.GetPropertyValue("DataRequestClassNameSuffix") is string dataRequestTypeSuffix))
+                //if (!(attributeData.GetPropertyValue("DataRequestClassNameSuffix") is string dataRequestTypeSuffix))
+                //{
+                //    continue;
+                //}
+                if (!(attributeData.GetPropertyValue("InterfacePrefix") is string interfacePrefix))
                 {
                     continue;
                 }
 
-                var dataRequestType = modelType + dataRequestTypeSuffix;
+                var interfaceType = interfacePrefix + modelType;
 
                 if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
                 {
@@ -48,14 +53,15 @@ namespace MusicClub.v3.SourceGenerators.DbCore
                     continue;
                 }
 
-                var properties = context.GetPropertySymbolNames(classDeclarationSyntax);
+                //var properties = context.GetPropertySymbolNames(classDeclarationSyntax);
+               var properties = context.GetInterfaceProperties(classDeclarationSyntax).Select(x => x.Name);
 
-                if (!(attributeData.GetParamStringArrayValues() is IEnumerable<string> excludedProperties))
+                if (!(attributeData.GetParamStringArrayValues() is IEnumerable<string> additionalProperties))
                 {
                     continue;
                 }
 
-                var classname = dataRequestType + "Extensions"; //get extension from the attribute?
+                var classname = interfaceType + "Extensions"; //get extension from the attribute?
 
                 if (!(attributeData.GetPropertyValue("Created") is string created))
                 {
@@ -67,7 +73,7 @@ namespace MusicClub.v3.SourceGenerators.DbCore
                     continue;
                 }
 
-                var source = ClassStrings.GetDataRequestToModelString(@namespace, classname, modelType, properties, excludedProperties, dataRequestType, created, updated);
+                var source = ClassStrings.GetIModelToModelString(@namespace, classname, modelType, properties, additionalProperties, interfaceType, created, updated);
 
                 context.AddSource(classname + NamingConventions.FileExtension, source);
             }

@@ -1,8 +1,8 @@
-﻿namespace MusicClub.v3.DbCore.Interfaces
+﻿namespace MusicClub.v3.IModels
 {
     public interface IArtist
     {
-        string Alias { get; set; }
+        string? Alias { get; set; }
 
         int PersonId { get; set; }
     }

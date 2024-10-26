@@ -29,9 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerato
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.Dto", "MusicClub.v3.SourceGenerators.Dto\MusicClub.v3.SourceGenerators.Dto.csproj", "{07A1BF1D-AFEF-4269-AA53-A8FD4578E0AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.DbCore", "MusicClub.v3.DbCore\MusicClub.v3.DbCore.csproj", "{504E410E-7C93-46FE-9F4A-03A9768B566D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.DbCore", "MusicClub.v3.DbCore\MusicClub.v3.DbCore.csproj", "{504E410E-7C93-46FE-9F4A-03A9768B566D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.DbCore", "MusicClub.v3.SourceGenerators.DbCore\MusicClub.v3.SourceGenerators.DbCore.csproj", "{2825A20C-3E05-48CC-8FB8-1C4D62FB8984}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.DbCore", "MusicClub.v3.SourceGenerators.DbCore\MusicClub.v3.SourceGenerators.DbCore.csproj", "{2825A20C-3E05-48CC-8FB8-1C4D62FB8984}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.IModels", "MusicClub.v3.IModels\MusicClub.v3.IModels.csproj", "{1D4DD91B-336A-4520-885F-5B5A933E29E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{2825A20C-3E05-48CC-8FB8-1C4D62FB8984}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2825A20C-3E05-48CC-8FB8-1C4D62FB8984}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2825A20C-3E05-48CC-8FB8-1C4D62FB8984}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D4DD91B-336A-4520-885F-5B5A933E29E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D4DD91B-336A-4520-885F-5B5A933E29E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D4DD91B-336A-4520-885F-5B5A933E29E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D4DD91B-336A-4520-885F-5B5A933E29E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{07A1BF1D-AFEF-4269-AA53-A8FD4578E0AB} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 		{504E410E-7C93-46FE-9F4A-03A9768B566D} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
 		{2825A20C-3E05-48CC-8FB8-1C4D62FB8984} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
+		{1D4DD91B-336A-4520-885F-5B5A933E29E3} = {FA818B2B-1F06-46CF-9E7C-431FDBD41B74}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28C5E559-5FFF-4ECF-A9D0-2FE3955A2E8F}
