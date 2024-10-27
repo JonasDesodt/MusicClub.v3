@@ -19,11 +19,11 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 {
                     var name = Regex.Replace(property.Name, foreignKeyPattern, foreignKeyReplacement);
 
-                    yield return $"public {(property.IsRequired ? "required " : string.Empty)}{name}{(property.Type.NullableAnnotation == NullableAnnotation.Annotated ? "?" : string.Empty)} {name} {{get; set; }}";
+                    yield return $"public {(property.Type.NullableAnnotation != NullableAnnotation.Annotated || property.IsRequired ? "required " : string.Empty)}{name}{(property.Type.NullableAnnotation == NullableAnnotation.Annotated ? "?" : string.Empty)} {name} {{get; set; }}";
                 }
                 else
                 {
-                    yield return $"public {(property.IsRequired ? "required " : string.Empty)}{property.Type} {property.Name} {{get; set; }}";
+                    yield return $"public {(property.Type.NullableAnnotation != NullableAnnotation.Annotated || property.IsRequired ? "required " : string.Empty)}{property.Type} {property.Name} {{get; set; }}";
                 }
             }
         }
@@ -36,12 +36,12 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 {
                     var dataResponseName = Regex.Replace(property.Name, foreignKeyPattern, foreignKeyReplacement);
 
-                    yield return $"public {(property.IsRequired ? "required " : string.Empty)}{property.Type} {property.Name} {{get; set; }}";
-                    yield return $"public {(property.IsRequired ? "required " : string.Empty)}{dataResponseName}{(property.Type.NullableAnnotation == NullableAnnotation.Annotated ? "?" : string.Empty)} {dataResponseName} {{get; set; }}";
+                    yield return $"public {property.Type}{(property.Type.NullableAnnotation != NullableAnnotation.Annotated ? "?" : string.Empty)} {property.Name} {{get; set; }}";
+                    yield return $"public {dataResponseName}? {dataResponseName} {{get; set; }}";
                 }
                 else
                 {
-                    yield return $"public {(property.IsRequired ? "required " : string.Empty)}{property.Type} {property.Name} {{get; set; }}";
+                    yield return $"public {property.Type}{(property.Type.NullableAnnotation != NullableAnnotation.Annotated ? "?" : string.Empty)} {property.Name} {{get; set; }}";
                 }
             }
         }

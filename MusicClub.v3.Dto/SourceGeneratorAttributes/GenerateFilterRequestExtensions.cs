@@ -1,7 +1,7 @@
 ﻿namespace MusicClub.v3.Dto.SourceGeneratorAttributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    internal class GenerateFilterRequestExtensions : Attribute
+    internal class GenerateFilterRequestExtensions(Type iModel) : Attribute
     {
         public const string Request = GeneratorConstants.Request;
 

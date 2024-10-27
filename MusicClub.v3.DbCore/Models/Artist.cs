@@ -2,7 +2,7 @@
 
 namespace MusicClub.v3.DbCore.Models
 {
-    [GenerateIModelMappers("Created", "Updated")]
+    [GenerateIModelMappers(nameof(Created), nameof(Updated))]
     public class Artist : IArtist
     {
         public int Id { get; set; }
@@ -14,5 +14,10 @@ namespace MusicClub.v3.DbCore.Models
 
         public required int PersonId { get; set; }
         public Person? Person { get; set; }
+
+        public int? ImageId { get; set; }
+        public Image? Image { get; set; }
+
+        public IList<Performance> Performances { get; set; } = [];
     }
 }

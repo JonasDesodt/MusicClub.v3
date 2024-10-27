@@ -56,7 +56,8 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
                 var className = Regex.Replace(context.GetClassName(classDeclarationSyntax), classNamePattern, classNameReplacement);
                 var @namespace = Regex.Replace(context.GetNamespace(classDeclarationSyntax), namespacePattern, namespaceReplacement);
-                var properties = context.GetPropertySymbols(classDeclarationSyntax);
+                //var properties = context.GetPropertySymbols(classDeclarationSyntax);
+                var properties = context.GetInterfaceProperties(classDeclarationSyntax);
 
                 context.AddSource(className + NamingConventions.FileExtension, ClassStrings.GetResponseString(@namespace, className, properties.GetDataResponsePropertyStrings(foreignKeyPattern, foreignKeyReplacement)));
             }

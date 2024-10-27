@@ -3,12 +3,8 @@ using MusicClub.v3.IModels;
 
 namespace MusicClub.v3.Dto.Data.Request
 {
+    [GenerateIModelImplementation]
     [GenerateDataResponse]
     [GenerateDataMappers]
-    public class ArtistDataRequest : IArtist
-    {
-        public string? Alias { get; set; }
-
-        public required int PersonId { get; set; }
-    }
+    public partial class ArtistDataRequest : IArtist { }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
@@ -82,7 +83,10 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
                 var filterRequestExtensionsNamespace = baseNamespace + "." + request;
                 var filterResponseExtensionsNamespace = baseNamespace + "." + response;
-                var properties = context.GetPropertySymbols(requestClassDeclarationSyntax);
+
+                //todo => get the props through the attributeData, now is done through the attributeSyntax
+                var interfaceProperties = context.GetInterfacePropertiesFromAttributeConstructorParam(requestClassDeclarationSyntax, "GenerateFilterMappers");
+                var properties = context.GetPropertySymbols(requestClassDeclarationSyntax).Concat(interfaceProperties);
 
                 if (!(attributeData.GetPropertyValue("ForeignKeyReplacePattern") is string foreignKeyReplacePattern))
                 {

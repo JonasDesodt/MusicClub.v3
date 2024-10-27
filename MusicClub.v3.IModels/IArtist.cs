@@ -5,5 +5,7 @@
         string? Alias { get; set; }
 
         int PersonId { get; set; }
+
+        int? ImageId { get; set; }
     }
 }

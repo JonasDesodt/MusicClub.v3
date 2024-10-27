@@ -3,6 +3,7 @@ using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using MusicClub.v3.SourceGenerators.Shared.Strings;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Dto
@@ -58,7 +59,10 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
                 var className = Regex.Replace(context.GetClassName(classDeclarationSyntax), classNamePattern, classNameReplacement);
                 var @namespace = Regex.Replace(context.GetNamespace(classDeclarationSyntax), namespacePattern, namespaceReplacement);
-                var properties = context.GetPropertySymbols(classDeclarationSyntax);
+                
+                //todo => get the props through the attributeData, now is done through the attributeSyntax
+                var interfaceProperties = context.GetInterfacePropertiesFromAttributeConstructorParam(classDeclarationSyntax, "GenerateFilterResponse");
+                var properties = context.GetPropertySymbols(classDeclarationSyntax).Concat(interfaceProperties);
 
                 context.AddSource(className + NamingConventions.FileExtension, ClassStrings.GetResponseString(@namespace, className, properties.GetFilterResponsePropertyStrings(foreignKeyPattern, foreignKeyReplacement)));
             }

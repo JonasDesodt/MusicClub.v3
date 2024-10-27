@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Response\" />
-    <Folder Include="Filter\Response\" />
-    <Folder Include="Transfer\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Filter\Response\" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\MusicClub.v3.IModels\MusicClub.v3.IModels.csproj" />
 		<ProjectReference Include="..\MusicClub.v3.SourceGenerators.Dto\MusicClub.v3.SourceGenerators.Dto.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7" />
 	</ItemGroup>
 </Project>

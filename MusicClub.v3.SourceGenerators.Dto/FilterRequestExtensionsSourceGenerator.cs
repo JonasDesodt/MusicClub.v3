@@ -3,6 +3,7 @@ using MusicClub.v3.SourceGenerators.Shared.Constants;
 using MusicClub.v3.SourceGenerators.Shared.Extensions;
 using MusicClub.v3.SourceGenerators.Shared.Receivers;
 using MusicClub.v3.SourceGenerators.Shared.Strings;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Dto
@@ -57,7 +58,10 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
                 var @namespace = baseNamespace + "." + request;
 
-                var properties = context.GetPropertySymbols(requestClassDeclarationSyntax);
+
+                //todo => get the props through the attributeData, now is done through the attributeSyntax
+                var interfaceProperties = context.GetInterfacePropertiesFromAttributeConstructorParam(requestClassDeclarationSyntax, "GenerateFilterMappers");
+                var properties = context.GetPropertySymbols(requestClassDeclarationSyntax).Concat(interfaceProperties);
 
                 context.AddSource(@class + NamingConventions.FileExtension, ClassStrings.GetToQueryStringExtensionString(@namespace, @class, @type, properties));
             }

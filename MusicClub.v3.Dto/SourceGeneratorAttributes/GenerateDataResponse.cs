@@ -9,7 +9,7 @@
         public const string NamespacePattern = @$"(?<=\S){GeneratorConstants.Request}(?!.+{GeneratorConstants.Request})";
         public const string NamespaceReplacement = GeneratorConstants.Response;
 
-        public const string ForeignKeyPattern = @$"(?<=\S){GeneratorConstants.Id}(?!.+{GeneratorConstants.Id})";
+        public const string ForeignKeyPattern = @$"(?<=\S){GeneratorConstants.Id}$"; //@$"(?<=\S){GeneratorConstants.Id}(?!.+{GeneratorConstants.Id})";
         public const string ForeignKeyReplacement = ClassNameReplacement;
     }
 }

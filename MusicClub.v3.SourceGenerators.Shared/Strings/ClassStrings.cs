@@ -84,6 +84,29 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
+        //public static string GetDataResponseString(string @namespace, string className, IEnumerable<IPropertySymbol> propertyStrings, string foreinKeyReplacePattern)
+        //{
+        //    var stringBuilder = new StringBuilder();
+
+        //    stringBuilder.AppendNullable();
+
+        //    stringBuilder.AppendLine($"namespace {@namespace}");
+        //    stringBuilder.AppendLine($"{{");
+
+        //    stringBuilder.AppendLine($"\tpublic partial class {className}");
+        //    stringBuilder.AppendLine($"\t{{");
+
+        //    foreach (var propertyString in propertyStrings)
+        //    {
+        //        stringBuilder.AppendLine($"\t\t" + propertyString);
+        //    }
+
+        //    stringBuilder.AppendLine($"\t}}");
+        //    stringBuilder.AppendLine($"}}");
+
+        //    return stringBuilder.ToString();
+        //}
+
         public static string GetResponseToRequestMapperString(string @namespace, string responseExtensionsClassName, string responseTypeName, string requestTypeName, IEnumerable<IPropertySymbol> classProperties)
         {
             var stringBuilder = new StringBuilder();
@@ -96,7 +119,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             stringBuilder.AppendLine($"\tpublic static partial class {responseExtensionsClassName}");
             stringBuilder.AppendLine($"\t{{");
 
-            stringBuilder.AppendLine($"\t\tpublic static {requestTypeName} ToRequest({responseTypeName} response)");
+            stringBuilder.AppendLine($"\t\tpublic static {requestTypeName} ToRequest(this {responseTypeName} response)");
             stringBuilder.AppendLine($"\t\t{{");
 
             stringBuilder.AppendLine($"\t\t\treturn new {requestTypeName}");
@@ -181,17 +204,10 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             {
                 var name = property.Name;
 
-                if (property.Type.NullableAnnotation is NullableAnnotation.Annotated)
-                {
-                    stringBuilder.AppendLine($"\t\t\tif(filter.{name} is not null)");
-                    stringBuilder.AppendLine($"\t\t\t{{");
-                    stringBuilder.AppendLine($"\t\t\t\tstringBuilder.Append($\"&{name}={{filter.{name}}}\");");
-                    stringBuilder.AppendLine($"\t\t\t}}");
-                }
-                else
-                {
-                    stringBuilder.AppendLine($"\t\t\t\tstringBuilder.Append($\"&{name}={{filter.{name}}}\");");
-                }
+                stringBuilder.AppendLine($"\t\t\tif(filter.{name} is not null)");
+                stringBuilder.AppendLine($"\t\t\t{{");
+                stringBuilder.AppendLine($"\t\t\tstringBuilder.Append($\"&{name}={{filter.{name}}}\");");
+                stringBuilder.AppendLine($"\t\t\t}}");
             }
 
             stringBuilder.AppendLine();
@@ -248,6 +264,70 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
 
             stringBuilder.AppendLine($"\t\t\t}};");
             stringBuilder.AppendLine($"\t\t}}");
+
+            stringBuilder.AppendLine($"\t}}");
+
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
+        }
+
+        public static string GetIModelImplementationString(string @namespace, string @class, IEnumerable<IPropertySymbol> properties)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendNullable();
+
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
+
+            stringBuilder.AppendLine($"\tpublic partial class {@class}");
+            stringBuilder.AppendLine($"\t{{");
+
+            foreach (var property in properties)
+            {
+                if (property.Type.NullableAnnotation is NullableAnnotation.Annotated)
+                {
+                    stringBuilder.AppendLine($"\t\tpublic {property.Type} {property.Name} {{get; set; }} ");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"\t\t[Required]");
+                    stringBuilder.AppendLine($"\t\tpublic required {property.Type} {property.Name} {{get; set; }} ");
+                }
+            }
+
+            stringBuilder.AppendLine($"\t}}");
+
+            stringBuilder.AppendLine($"}}");
+
+            return stringBuilder.ToString();
+        }
+
+
+        public static string GetIModelFilterRequestImplementationString(string @namespace, string @class, IEnumerable<IPropertySymbol> properties)
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendNullable();
+
+            stringBuilder.AppendLine($"namespace {@namespace}");
+            stringBuilder.AppendLine($"{{");
+
+            stringBuilder.AppendLine($"\tpublic partial class {@class}");
+            stringBuilder.AppendLine($"\t{{");
+
+            foreach (var property in properties)
+            {
+                if (property.Type.NullableAnnotation is NullableAnnotation.Annotated)
+                {
+                    stringBuilder.AppendLine($"\t\tpublic {property.Type} {property.Name} {{get; set; }} ");
+                }
+                else
+                {
+                    stringBuilder.AppendLine($"\t\tpublic {property.Type}? {property.Name} {{get; set; }} ");
+                }
+            }
 
             stringBuilder.AppendLine($"\t}}");
 

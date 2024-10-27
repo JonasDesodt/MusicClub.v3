@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MusicClub.v3.SourceGenerators.Shared.Constants;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Extensions
@@ -143,17 +144,40 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             }
         }
 
-        public static IEnumerable<IPropertySymbol> GetInterfaceProperties(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclaration)
+        public static IEnumerable<IPropertySymbol> GetInterfaceProperties(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclaration, string name = null)
         {
             // Get the symbol representing the class
-              var namedTypeSymbol = context.GetNamedTypeSymbol(classDeclaration);
-            // Enumerate through all implemented interfaces
-            foreach (var interfaceSymbol in namedTypeSymbol.AllInterfaces) //todo => limit to the iModel? 
+            var namedTypeSymbol = context.GetNamedTypeSymbol(classDeclaration);
+            // Enumerate through all implemented interfaces            
+
+            foreach (var interfaceSymbol in namedTypeSymbol.AllInterfaces.Where(i => name == null || i.Name == name)) //todo => limit to the iModel? 
             {
                 // Get all members of the interface and filter to properties
                 foreach (var member in interfaceSymbol.GetMembers().OfType<IPropertySymbol>())
                 {
                     yield return member;
+                }
+            }
+        }
+
+        public static IEnumerable<IPropertySymbol> GetInterfacePropertiesFromAttributeConstructorParam(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax, string attributeName)
+        {
+            var model = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+            var attribute = classDeclarationSyntax.AttributeLists
+                .SelectMany(attrList => attrList.Attributes)
+                .FirstOrDefault(attr => attr.Name.ToString().Contains(attributeName));
+
+            var attributeArgument = attribute.ArgumentList?.Arguments.FirstOrDefault();
+            if (attributeArgument?.Expression is TypeOfExpressionSyntax typeOfExpression)
+            {
+                var typeSymbol = model.GetTypeInfo(typeOfExpression.Type).Type as INamedTypeSymbol;
+                if (typeSymbol != null && typeSymbol.TypeKind == TypeKind.Interface)
+                {
+                    var properties = typeSymbol.GetMembers().OfType<IPropertySymbol>();
+                    foreach (var property in properties)
+                    {
+                        yield return property;
+                    }
                 }
             }
         }

@@ -4,5 +4,6 @@
     {
         string Firstname { get; set; }
         string Lastname { get; set; }
+        int? ImageId { get; set; }
     }
 }
