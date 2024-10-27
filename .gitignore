@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /MusicClub.v3.Api/appsettings.Development.json
+/MusicClub.v3.Api/Secrets/google-calendar-service-account-key.json
