@@ -1,3 +1,6 @@
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Services;
 using Microsoft.EntityFrameworkCore;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Extensions;
@@ -11,9 +14,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var credentialPath = Path.Combine(Directory.GetCurrentDirectory(), "secrets", "google-calendar-service-account-key.json");
+
+var googleCredential = GoogleCredential.FromFile(credentialPath).CreateScoped(CalendarService.Scope.Calendar);
+
+var calendarService = new CalendarService(new BaseClientService.Initializer()
+{
+    HttpClientInitializer = googleCredential,
+    ApplicationName = "MusicClub"
+});
+
+builder.Services.AddSingleton(provider =>
+{
+    return calendarService;
+});
+
+
 builder.Services.AddDbContext<MusicClubDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+
 
 builder.Services.AddDbServices();
 

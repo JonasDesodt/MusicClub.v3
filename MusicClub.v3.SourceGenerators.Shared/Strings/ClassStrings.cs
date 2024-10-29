@@ -155,7 +155,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             stringBuilder.Append($"\t\tpublic static {responseTypeName} ToResponse(this {requestTypeName} request");
             if (additionalProperties.Count() > 0)
             {
-                stringBuilder.Append($", {string.Join(", ", additionalProperties.Select(x => x + "? " + x.ConvertFirstLetterToLowerCase()))}");
+                stringBuilder.Append($", {string.Join(", ", additionalProperties.Select(x => x + "? " + x.ConvertFirstLetterToLowerCase() + " = null!"))}");
             }
             stringBuilder.Append($")");
             stringBuilder.AppendLine($"\n\t\t{{");

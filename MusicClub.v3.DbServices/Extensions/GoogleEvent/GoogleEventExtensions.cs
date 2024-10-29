@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.DbServices.Extensions.Act;
 using MusicClub.v3.DbServices.Extensions.GoogleCalendar;
 using MusicClub.v3.DbServices.Extensions.GoogleEvent;
 using MusicClub.v3.Dto.Data.Response;
@@ -14,13 +15,13 @@ namespace MusicClub.v3.DbServices.Extensions.GoogleEvent
 
         public static IQueryable<GoogleEventDataResponse> ToResponses(this IQueryable<DbCore.Models.GoogleEvent> query)
         {
-            return query.Select(a => new GoogleEventDataResponse
+            return query.Select(g => new GoogleEventDataResponse
             {
-                GoogleIdentifier = a.GoogleIdentifier,
-                Created = a.Created,
-                Id = a.Id,
-                Updated = a.Updated,
-                GoogleCalendarDataResponse = a.GoogleCalendar!.ToResponse()  //TODO: temp hack (!), deal w/ null reference
+                Created = g.Created,
+                Id = g.Id,
+                Updated = g.Updated,
+                GoogleCalendarDataResponse = g.GoogleCalendar != null ? g.GoogleCalendar.ToResponse() : null!,  //TODO: temp hack (!), deal w/ null reference
+                ActDataResponse = g.Act != null ? g.Act.ToResponse() : null!
             });
         }
 
@@ -28,11 +29,11 @@ namespace MusicClub.v3.DbServices.Extensions.GoogleEvent
         {
             return new GoogleEventDataResponse
             {
-                GoogleIdentifier = googleEvent.GoogleIdentifier,
                 Created = googleEvent.Created,
                 Id = googleEvent.Id,
                 Updated = googleEvent.Updated,
-                GoogleCalendarDataResponse = googleEvent.GoogleCalendar != null ? googleEvent.GoogleCalendar.ToResponse() : null! //TODO: temp hack (!), deal w/ null reference
+                GoogleCalendarDataResponse = googleEvent.GoogleCalendar != null ? googleEvent.GoogleCalendar.ToResponse() : null!, //TODO: temp hack (!), deal w/ null reference
+                ActDataResponse = googleEvent.Act != null ? googleEvent.Act.ToResponse() : null!
             };
         }
     }

@@ -2,7 +2,7 @@
 
 namespace MusicClub.v3.DbCore.Models
 {
-    [GenerateIModelMappers(nameof(Created), nameof(Updated))]
+    //[GenerateIModelMappers(nameof(Created), nameof(Updated))]
     public class GoogleEvent : IGoogleEvent
     {
         public int Id { get; set; }
