@@ -2,7 +2,6 @@
 using MusicClub.v3.Api.SourceGeneratorAttributes;
 using MusicClub.v3.DbCore.Models;
 using MusicClub.v3.Dto.Transfer;
-using System.Runtime.InteropServices;
 
 namespace MusicClub.v3.Api.Controllers
 {

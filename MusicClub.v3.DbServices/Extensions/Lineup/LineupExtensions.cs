@@ -49,21 +49,40 @@ namespace MusicClub.v3.DbServices.Extensions.Lineup
 
         public static IQueryable<DbCore.Models.Lineup> Filter(this IQueryable<DbCore.Models.Lineup> lineups, LineupFilterRequest filterRequest)
         {
-
-
             if (!string.IsNullOrWhiteSpace(filterRequest.Title))
             {
-                lineups = lineups.Where(a => a.Title != null && a.Title.ToLower().Contains(filterRequest.Title.ToLower()));
+                lineups = lineups.Where(l => l.Title != null && l.Title.ToLower().Contains(filterRequest.Title.ToLower()));
+            } // note => if both title & deepSearch are set, title will be used!
+            else if (!string.IsNullOrWhiteSpace(filterRequest.DeepSearch))
+            {
+                lineups = lineups
+                    .Where(l =>
+                            l.Title != null && l.Title.ToLower().Contains(filterRequest.DeepSearch.ToLower())
+                            || l.Acts.Any(a => a.Name.ToLower().Contains(filterRequest.DeepSearch.ToLower()) || a.Title != null && a.Title.ToLower().Contains(filterRequest.DeepSearch.ToLower()) /*|| a.Description != null && a.Description.ToLower().Contains(filterRequest.DeepSearch.ToLower())*/));
+                       
+            }
+
+            if(filterRequest.Between is { } between)
+            {
+                if(between.From is { } from)
+                {
+                    lineups = lineups.Where(l => between.IncludeFrom ? l.Doors >= between.From : l.Doors > between.From);
+                }
+
+                if(between.To is { } to)
+                {
+                    lineups = lineups.Where(l => between.IncludeTo ? l.Doors <= between.To : l.Doors < between.To);
+                }
             }
 
             if (filterRequest.ImageId > 0)
             {
-                lineups = lineups.Where(a => a.ImageId != null && a.ImageId == filterRequest.ImageId);
+                lineups = lineups.Where(l => l.ImageId != null && l.ImageId == filterRequest.ImageId);
             }
 
             if (filterRequest.Doors is { } doors)
             {
-                lineups = lineups.Where(a => a.Doors.ToShortDateString().Equals(doors.ToShortDateString()));
+                lineups = lineups.Where(l => l.Doors.ToShortDateString().Equals(doors.ToShortDateString()));
             }
 
             if (!string.IsNullOrWhiteSpace(filterRequest.SortProperty))
