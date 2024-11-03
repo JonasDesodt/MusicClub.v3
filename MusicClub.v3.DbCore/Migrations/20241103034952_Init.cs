@@ -40,6 +40,20 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Descriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Descriptions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Functions",
                 columns: table => new
                 {
@@ -84,6 +98,21 @@ namespace MusicClub.v3.DbCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Images", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Languages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,6 +233,35 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DescriptionTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    DescriptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DescriptionTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DescriptionTranslations_Descriptions_DescriptionId",
+                        column: x => x.DescriptionId,
+                        principalTable: "Descriptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DescriptionTranslations_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Acts",
                 columns: table => new
                 {
@@ -211,18 +269,24 @@ namespace MusicClub.v3.DbCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     LineupId = table.Column<int>(type: "int", nullable: false),
-                    GoogleEventId = table.Column<int>(type: "int", nullable: true)
+                    GoogleEventId = table.Column<int>(type: "int", nullable: true),
+                    DescriptionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Acts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Acts_Descriptions_DescriptionId",
+                        column: x => x.DescriptionId,
+                        principalTable: "Descriptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Acts_GoogleEvents_GoogleEventId",
                         column: x => x.GoogleEventId,
@@ -529,6 +593,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Acts_DescriptionId",
+                table: "Acts",
+                column: "DescriptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Acts_GoogleEventId",
                 table: "Acts",
                 column: "GoogleEventId",
@@ -608,6 +677,16 @@ namespace MusicClub.v3.DbCore.Migrations
                 name: "IX_Bandnames_ImageId",
                 table: "Bandnames",
                 column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DescriptionTranslations_DescriptionId",
+                table: "DescriptionTranslations",
+                column: "DescriptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DescriptionTranslations_LanguageId",
+                table: "DescriptionTranslations",
+                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GoogleEvents_GoogleCalendarId",
@@ -699,6 +778,9 @@ namespace MusicClub.v3.DbCore.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DescriptionTranslations");
+
+            migrationBuilder.DropTable(
                 name: "Jobs");
 
             migrationBuilder.DropTable(
@@ -714,6 +796,9 @@ namespace MusicClub.v3.DbCore.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Languages");
+
+            migrationBuilder.DropTable(
                 name: "Acts");
 
             migrationBuilder.DropTable(
@@ -727,6 +812,9 @@ namespace MusicClub.v3.DbCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Workers");
+
+            migrationBuilder.DropTable(
+                name: "Descriptions");
 
             migrationBuilder.DropTable(
                 name: "GoogleEvents");

@@ -6,6 +6,7 @@ using MusicClub.v3.Dto.Data.Response;
 using MusicClub.v3.Dto.Enums;
 using MusicClub.v3.DbServices.Extensions.Lineup;
 using MusicClub.v3.Dto.Filter.Request;
+using MusicClub.v3.DbServices.Extensions.Description;
 
 namespace MusicClub.v3.DbServices.Extensions.Act
 {
@@ -21,6 +22,7 @@ namespace MusicClub.v3.DbServices.Extensions.Act
             return query.Include(x => x.Image)
                         .Include(x => x.Jobs)
                         .Include(x => x.Lineup)
+                        .Include(x => x.Description)
                         .Include(x => x.GoogleEvent)
                         .Include(x => x.Performances);
         }
@@ -29,7 +31,7 @@ namespace MusicClub.v3.DbServices.Extensions.Act
         {
             return query.Select(a => new ActDataResponse
             {
-                Description = a.Description,
+                DescriptionDataResponse = a.Description != null ? a.Description.ToResponse() : null,
                 Duration = a.Duration,
                 Start = a.Start,
                 Name = a.Name,
@@ -130,7 +132,7 @@ namespace MusicClub.v3.DbServices.Extensions.Act
             act.Duration = actDataRequest.Duration;
             act.Start = actDataRequest.Start;
             act.LineupId = actDataRequest.LineupId;
-            act.Description = actDataRequest.Description;
+            act.DescriptionId = actDataRequest.DescriptionId;
 
             return act;
         }
@@ -141,7 +143,7 @@ namespace MusicClub.v3.DbServices.Extensions.Act
             {
                 Name = act.Name,
                 Title = act.Title,
-                Description = act.Description,
+                DescriptionDataResponse = act.Description != null ? act.Description.ToResponse() : null,
                 PerformancesCount = act.Performances.Count,
                 Created = act.Created,
                 Id = act.Id,

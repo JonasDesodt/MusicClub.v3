@@ -52,7 +52,7 @@ namespace MusicClub.v3.DbServices
             var eventRequest = new Event
             {
                 Summary = act.Name,
-                Description = act.Description,
+                Description = act.DescriptionId.ToString(), // todo => temp hack, include the Description!
                 Start = new EventDateTime
                 {
                     DateTimeRaw = act.Start?.ToString("o"),

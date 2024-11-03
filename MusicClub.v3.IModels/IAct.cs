@@ -4,13 +4,14 @@
     {
         string Name { get; set; }
         string? Title { get; set; }
-        string? Description { get; set; }
-
+        
         DateTime? Start { get; set; }
         int? Duration { get; set; }
 
         int? ImageId { get; set; }
         int LineupId { get; set; }
         int? GoogleEventId { get; set; }
+
+        int? DescriptionId { get; set; }
     }
 }

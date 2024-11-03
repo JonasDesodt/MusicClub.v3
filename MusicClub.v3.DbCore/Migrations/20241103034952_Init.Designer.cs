@@ -12,7 +12,7 @@ using MusicClub.v3.DbCore;
 namespace MusicClub.v3.DbCore.Migrations
 {
     [DbContext(typeof(MusicClubDbContext))]
-    [Migration("20241027143722_Init")]
+    [Migration("20241103034952_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -169,8 +169,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("DescriptionId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Duration")
                         .HasColumnType("int");
@@ -198,6 +198,8 @@ namespace MusicClub.v3.DbCore.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DescriptionId");
 
                     b.HasIndex("GoogleEventId")
                         .IsUnique()
@@ -370,6 +372,58 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.ToTable("Bandnames");
                 });
 
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Description", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Descriptions");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.DescriptionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DescriptionId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("DescriptionTranslations");
+                });
+
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Function", b =>
                 {
                     b.Property<int>("Id")
@@ -511,6 +565,29 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("WorkerId");
 
                     b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Lineup", b =>
@@ -739,6 +816,11 @@ namespace MusicClub.v3.DbCore.Migrations
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Act", b =>
                 {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Description", "Description")
+                        .WithMany("Acts")
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("MusicClub.v3.DbCore.Models.GoogleEvent", "GoogleEvent")
                         .WithOne("Act")
                         .HasForeignKey("MusicClub.v3.DbCore.Models.Act", "GoogleEventId")
@@ -754,6 +836,8 @@ namespace MusicClub.v3.DbCore.Migrations
                         .HasForeignKey("LineupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Description");
 
                     b.Navigation("GoogleEvent");
 
@@ -806,6 +890,25 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Band");
 
                     b.Navigation("Image");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.DescriptionTranslation", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Description", "Description")
+                        .WithMany("DescriptionTranslations")
+                        .HasForeignKey("DescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicClub.v3.DbCore.Models.Language", "Language")
+                        .WithMany("DescriptionTranslations")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Description");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.GoogleEvent", b =>
@@ -958,6 +1061,13 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Performances");
                 });
 
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Description", b =>
+                {
+                    b.Navigation("Acts");
+
+                    b.Navigation("DescriptionTranslations");
+                });
+
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Function", b =>
                 {
                     b.Navigation("Jobs");
@@ -986,6 +1096,11 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("People");
 
                     b.Navigation("Performances");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Language", b =>
+                {
+                    b.Navigation("DescriptionTranslations");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Lineup", b =>

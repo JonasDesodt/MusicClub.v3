@@ -1,4 +1,5 @@
 ﻿using MusicClub.v3.DbCore.SourceGeneratorAttributes;
+using MusicClub.v3.IModels;
 
 namespace MusicClub.v3.DbCore.Models
 {
@@ -8,8 +9,6 @@ namespace MusicClub.v3.DbCore.Models
         public int Id { get; set; }
         public required string Name { get; set; }
         public string? Title { get; set; }
-        public string? Description { get; set; }
-
         public DateTime? Start { get; set; } 
         public int? Duration { get; set; }
 
@@ -32,5 +31,8 @@ namespace MusicClub.v3.DbCore.Models
 
         public int? GoogleEventId { get; set; }
         public GoogleEvent? GoogleEvent { get; set; }
+
+        public int? DescriptionId { get; set; }
+        public Description? Description { get; set; }
     }
 }

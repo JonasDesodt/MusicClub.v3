@@ -8,16 +8,19 @@ namespace MusicClub.v3.Api.Controllers
     [ApiController]
     [Route("[controller]")]
     [GenerateControllers(
-        nameof(Act), 
-        nameof(Artist), 
-        nameof(Band), 
-        nameof(Bandname), 
+        nameof(Act),
+        nameof(Artist),
+        nameof(Band),
+        nameof(Bandname),
+        nameof(Description),
+        nameof(DescriptionTranslation),
         nameof(Function),
         nameof(GoogleCalendar),
         nameof(GoogleEvent),
         nameof(Job),
+        nameof(Language),
         nameof(Lineup),
-        nameof(Performance), 
+        nameof(Performance),
         nameof(Person),
         nameof(Service),
         nameof(Worker))]

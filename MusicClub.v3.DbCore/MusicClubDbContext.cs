@@ -13,6 +13,10 @@ namespace MusicClub.v3.DbCore
 
         public DbSet<Bandname> Bandnames => Set<Bandname>();
 
+        public DbSet<Description> Descriptions => Set<Description>();
+
+        public DbSet<DescriptionTranslation> DescriptionTranslations => Set<DescriptionTranslation>();
+
         public DbSet<GoogleCalendar> GoogleCalendars => Set<GoogleCalendar>();
 
         public DbSet<GoogleEvent> GoogleEvents => Set<GoogleEvent>();
@@ -22,6 +26,8 @@ namespace MusicClub.v3.DbCore
         public DbSet<Image> Images => Set<Image>();
 
         public DbSet<Job> Jobs => Set<Job>();
+
+        public DbSet<Language> Languages => Set<Language>();
 
         public DbSet<Lineup> Lineups => Set<Lineup>();
 
@@ -36,6 +42,13 @@ namespace MusicClub.v3.DbCore
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Act>()
+                .HasOne(a => a.Description)
+                .WithMany(i => i.Acts)
+                .HasForeignKey(a => a.DescriptionId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
+
             builder.Entity<Act>()
                 .HasOne(a => a.Image)
                 .WithMany(i => i.Acts)
@@ -73,6 +86,18 @@ namespace MusicClub.v3.DbCore
                  .WithMany(b => b.Bandnames)
                  .HasForeignKey(b => b.BandId)
                  .IsRequired(true);
+
+            builder.Entity<DescriptionTranslation>()
+                .HasOne(d => d.Description)
+                .WithMany(d => d.DescriptionTranslations)
+                .HasForeignKey(d => d.DescriptionId)
+                .IsRequired(true);
+
+            builder.Entity<DescriptionTranslation>()
+                .HasOne(d => d.Language)
+                .WithMany(l => l.DescriptionTranslations)
+                .HasForeignKey(d => d.LanguageId)
+                .IsRequired(true);
 
             builder.Entity<GoogleEvent>()
                 .HasOne(g => g.Act)
