@@ -1,9 +1,14 @@
 ﻿using MusicClub.v3.DbCore;
+using MusicClub.v3.DbCore.Models;
+using MusicClub.v3.DbServices.Extensions.Artist;
+using MusicClub.v3.DbServices.Extensions;
 using MusicClub.v3.Dto.Data.Request;
 using MusicClub.v3.Dto.Data.Response;
 using MusicClub.v3.Dto.Filter.Request;
 using MusicClub.v3.Dto.Filter.Response;
 using MusicClub.v3.Dto.Transfer;
+using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.DbServices.Extensions.Description;
 
 namespace MusicClub.v3.DbServices
 {
@@ -19,9 +24,13 @@ namespace MusicClub.v3.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResult<DescriptionDataResponse>> Get(int id)
+        public async Task<ServiceResult<DescriptionDataResponse>> Get(int id)
         {
-            throw new NotImplementedException();
+            return (await dbContext.Descriptions
+                .IncludeAll()
+                .ToResponses()
+                .FirstOrDefaultAsync(p => p.Id == id))
+                .Wrap(new ServiceMessages().AddNotFound(nameof(Description), id));
         }
 
         public Task<PagedServiceResult<IList<DescriptionDataResponse>, DescriptionFilterResponse>> GetAll(PaginationRequest paginationRequest, DescriptionFilterRequest filterRequest)

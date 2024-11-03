@@ -1,6 +1,11 @@
-﻿using MusicClub.v3.DbCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.DbCore;
+using MusicClub.v3.DbServices.Extensions;
+using MusicClub.v3.DbServices.Extensions.Artist;
+using MusicClub.v3.DbServices.Extensions.DescriptionTranslation;
 using MusicClub.v3.Dto.Data.Request;
 using MusicClub.v3.Dto.Data.Response;
+using MusicClub.v3.Dto.Mappers.Filter.Request;
 using MusicClub.v3.Dto.Filter.Request;
 using MusicClub.v3.Dto.Filter.Response;
 using MusicClub.v3.Dto.Transfer;
@@ -24,9 +29,20 @@ namespace MusicClub.v3.DbServices
             throw new NotImplementedException();
         }
 
-        public Task<PagedServiceResult<IList<DescriptionTranslationDataResponse>, DescriptionTranslationFilterResponse>> GetAll(PaginationRequest paginationRequest, DescriptionTranslationFilterRequest filterRequest)
+        public async Task<PagedServiceResult<IList<DescriptionTranslationDataResponse>, DescriptionTranslationFilterResponse>> GetAll(PaginationRequest paginationRequest, DescriptionTranslationFilterRequest filterRequest)
         {
-            throw new NotImplementedException();
+            var totalCount = await dbContext.DescriptionTranslations
+                .IncludeAll()
+                .Filter(filterRequest)
+                .CountAsync();
+
+            return (await dbContext.DescriptionTranslations
+                .IncludeAll()
+                .Filter(filterRequest)
+                .GetPage(paginationRequest)
+                .ToResponses()
+                .ToListAsync())
+                .Wrap(paginationRequest, totalCount, filterRequest.ToResponse());
         }
 
         public Task<ServiceResult<DescriptionTranslationDataResponse>> Update(int id, DescriptionTranslationDataRequest request)

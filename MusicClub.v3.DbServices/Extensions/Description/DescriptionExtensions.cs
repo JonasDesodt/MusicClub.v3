@@ -15,5 +15,22 @@ namespace MusicClub.v3.DbServices.Extensions.Description
                 Id = description.Id
             };
         }
+
+        public static IQueryable<DescriptionDataResponse> ToResponses(this IQueryable<DbCore.Models.Description> query)
+        {
+            return query.Select(a => new DescriptionDataResponse
+            {
+                ActsCount = a.Acts.Count,
+                Created = a.Created,
+                Updated = a.Updated,
+                DescriptionTranslationsCount = a.DescriptionTranslations.Count,
+                Id = a.Id
+            });
+        }
+
+        public static IQueryable<DbCore.Models.Description> IncludeAll(this IQueryable<DbCore.Models.Description> query)
+        {
+            return query;
+        }
     }
 }

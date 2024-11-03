@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MusicClub.v3.Dto.Data.Response;
+using MusicClub.v3.Dto.Enums;
+using MusicClub.v3.Dto.Filter.Request;
 
 namespace MusicClub.v3.DbServices.Extensions.GoogleCalendar
 {
