@@ -214,6 +214,41 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.ToTable("Acts");
                 });
 
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.ApiKey", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("Archived")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("HashedApiKey")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("ApiKeys");
+                });
+
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -843,9 +878,6 @@ namespace MusicClub.v3.DbCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApiKey")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
@@ -986,6 +1018,17 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Image");
 
                     b.Navigation("Lineup");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.ApiKey", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("ApiKeys")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Tenant");
                 });
@@ -1425,6 +1468,8 @@ namespace MusicClub.v3.DbCore.Migrations
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Tenant", b =>
                 {
                     b.Navigation("Acts");
+
+                    b.Navigation("ApiKeys");
 
                     b.Navigation("Artists");
 

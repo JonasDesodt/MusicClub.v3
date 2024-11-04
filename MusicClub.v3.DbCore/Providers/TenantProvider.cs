@@ -1,6 +1,6 @@
-﻿namespace MusicClub.v3.DbCore.Services
+﻿namespace MusicClub.v3.DbCore.Providers
 {
-    public class TenantService
+    public class TenantProvider
     {
         private int _id = 0;
 

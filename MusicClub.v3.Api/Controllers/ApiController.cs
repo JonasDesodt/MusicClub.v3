@@ -11,6 +11,7 @@ namespace MusicClub.v3.Api.Controllers
     [Route("[controller]")]
     [GenerateControllers(
         nameof(Act),
+        nameof(ApiKey),
         nameof(Artist),
         nameof(Band),
         nameof(Bandname),

@@ -1,6 +1,9 @@
-﻿namespace MusicClub.v3.DbCore.Models
+﻿using MusicClub.v3.DbCore.SourceGeneratorAttributes;
+
+namespace MusicClub.v3.DbCore.Models
 {
-    public class Tenant
+    [GenerateIModelMappers(nameof(Created), nameof(Updated))]
+    public class Tenant : ITenant
     {
         public int Id { get; set; }
 
@@ -26,7 +29,7 @@
              
         public required string Name { get; set; }
 
-        public string? ApiKey { get; set; } //to do => set required or not?
+        public IList<ApiKey> ApiKeys { get; set; } = [];
 
         public IList<Tenancy> Tenancies { get; set; } = [];
     }

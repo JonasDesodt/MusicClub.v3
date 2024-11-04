@@ -1,5 +1,9 @@
-﻿using MusicClub.v3.DbCore;
-using MusicClub.v3.DbCore.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.DbCore;
+using MusicClub.v3.DbCore.Providers;
+using MusicClub.v3.DbServices.Helpers;
+using System.Net;
 
 namespace MusicClub.v3.Api.Middleware
 {
@@ -21,15 +25,30 @@ namespace MusicClub.v3.Api.Middleware
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<MusicClubDbContext>();
 
-                var tenant = dbContext.Tenants.SingleOrDefault(t => t.Name == extractedApplicationName.ToString() && t.ApiKey == extractedApiKey.ToString());
-                
+                var tenant = dbContext.Tenants.SingleOrDefault(t => t.Name == extractedApplicationName.ToString());
+
                 if (tenant is null)
                 {
                     context.Items["API_Key_Authenticated"] = false;
                 }
                 else
                 {
-                    context.Items["API_Key_Authenticated"] = tenant.Id;
+                    var apiKeyRecord = dbContext.ApiKeys.FirstOrDefault(x => x.Id == tenant.Id && x.Archived == null);
+                    if (apiKeyRecord is null)
+                    {
+                        context.Items["API_Key_Authenticated"] = false;
+                    }
+                    else
+                    {
+                        if (ApiKeyHelper.ValidateApiKey(apiKeyRecord, extractedApiKey.ToString()))
+                        {
+                            context.Items["API_Key_Authenticated"] = tenant.Id;
+                        }
+                        else
+                        {
+                            context.Items["API_Key_Authenticated"] = false;
+                        }
+                    }
                 }
             }
 

@@ -3,7 +3,7 @@ using MusicClub.v3.Dto.Transfer;
 
 namespace MusicClub.v3.Abstractions.Services
 {
-    [GenerateIServices("Act", "Artist", "Band", "Bandname", "Description", "DescriptionTranslation", "Function", "GoogleEvent", "GoogleCalendar", "Job", "Language", "Lineup", "Performance", "Person", "Service", "Worker")]
+    [GenerateIServices("Act", "ApiKey", "Artist", "Band", "Bandname", "Description", "DescriptionTranslation", "Function", "GoogleEvent", "GoogleCalendar", "Job", "Language", "Lineup", "Performance", "Person", "Service", "Tenant", "Tenancy", "Worker")]
     public interface IService<TDataRequest, TDataResponse, TFilterRequest, TFilterResponse>
     {
         Task<ServiceResult<TDataResponse>> Create(TDataRequest request);

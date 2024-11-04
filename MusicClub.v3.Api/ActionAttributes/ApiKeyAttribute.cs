@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.DbCore.Models;
-using MusicClub.v3.DbCore.Services;
+using MusicClub.v3.DbCore.Providers;
 
 namespace MusicClub.v3.Api.ActionAttributes
 {
@@ -15,13 +15,13 @@ namespace MusicClub.v3.Api.ActionAttributes
                 context.Result = new ContentResult()
                 {
                     StatusCode = 401,
-                    Content = "Unauthorized access"
+                    Content = "Unauthorized"
                 };
 
                 return;
             }      
 
-            var tenantService = context.HttpContext.RequestServices.GetRequiredService<TenantService>();
+            var tenantService = context.HttpContext.RequestServices.GetRequiredService<TenantProvider>();
             tenantService.Id = id;
 
             await next();

@@ -3,7 +3,7 @@ using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using Microsoft.EntityFrameworkCore;
 using MusicClub.v3.Api.Middleware;
-using MusicClub.v3.DbCore.Services;
+using MusicClub.v3.DbCore.Providers;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Extensions;
 
@@ -38,7 +38,7 @@ builder.Services.AddDbContext<MusicClubDbContext>(options =>
 
 builder.Services.AddDbServices();
 
-builder.Services.AddScoped<TenantService>();
+builder.Services.AddScoped<TenantProvider>();
 
 var app = builder.Build();
 

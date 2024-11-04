@@ -1,6 +1,9 @@
-﻿namespace MusicClub.v3.DbCore.Models
+﻿using MusicClub.v3.DbCore.SourceGeneratorAttributes;
+
+namespace MusicClub.v3.DbCore.Models
 {
-    public class Tenancy
+    [GenerateIModelMappers(nameof(Created), nameof(Updated))] 
+    public class Tenancy : ITenancy
     {
         public int Id { get; set; }
         public required DateTime Created { get; set; }

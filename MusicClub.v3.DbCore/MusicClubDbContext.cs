@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MusicClub.v3.DbCore.Services;
+using MusicClub.v3.DbCore.Providers;
 
 namespace MusicClub.v3.DbCore
 {
     public class MusicClubDbContext : IdentityDbContext<ApplicationUser>
     {
-        private readonly TenantService _tenantService;
+        private readonly TenantProvider _tenantProvider;
 
-        public MusicClubDbContext(DbContextOptions<MusicClubDbContext> options, TenantService tenantService) : base(options)
+        public MusicClubDbContext(DbContextOptions<MusicClubDbContext> options, TenantProvider tenantProvider) : base(options)
         {
-            _tenantService = tenantService;
+            _tenantProvider = tenantProvider;
 
-            _tenantService.OnTenantChanged += HandleOnTenantChanged;
+            _tenantProvider.OnTenantChanged += HandleOnTenantChanged;
         }
 
         private void HandleOnTenantChanged(object? _, int id)
         {
             CurrentTenantId = id;
 
-            _tenantService.OnTenantChanged -= HandleOnTenantChanged;
+            _tenantProvider.OnTenantChanged -= HandleOnTenantChanged;
         }
 
         public int CurrentTenantId { get; set; }
@@ -27,6 +27,8 @@ namespace MusicClub.v3.DbCore
         public DbSet<Act> Acts => Set<Act>();
 
         public DbSet<Artist> Artists => Set<Artist>();
+
+        public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
 
         public DbSet<Band> Bands => Set<Band>();
 
@@ -99,6 +101,12 @@ namespace MusicClub.v3.DbCore
                 .HasOne(a => a.Lineup)
                 .WithMany(l => l.Acts)
                 .HasForeignKey(a => a.LineupId)
+                .IsRequired(true);
+
+            builder.Entity<ApiKey>()
+                .HasOne(a => a.Tenant)
+                .WithMany(l => l.ApiKeys)
+                .HasForeignKey(a => a.TenantId)
                 .IsRequired(true);
 
             builder.Entity<ApplicationUser>()
