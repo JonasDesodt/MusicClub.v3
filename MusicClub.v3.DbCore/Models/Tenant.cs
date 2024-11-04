@@ -26,8 +26,8 @@
              
         public required string Name { get; set; }
 
+        public string? ApiKey { get; set; } //to do => set required or not?
+
         public IList<Tenancy> Tenancies { get; set; } = [];
-
-
     }
 }

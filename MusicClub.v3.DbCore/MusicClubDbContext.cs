@@ -1,12 +1,28 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
+using MusicClub.v3.DbCore.Services;
 
 namespace MusicClub.v3.DbCore
 {
-    public class MusicClubDbContext(DbContextOptions<MusicClubDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+    public class MusicClubDbContext : IdentityDbContext<ApplicationUser>
     {
-        public int CurrentTenantId { get; set; } = 2;
+        private readonly TenantService _tenantService;
+
+        public MusicClubDbContext(DbContextOptions<MusicClubDbContext> options, TenantService tenantService) : base(options)
+        {
+            _tenantService = tenantService;
+
+            _tenantService.OnTenantChanged += HandleOnTenantChanged;
+        }
+
+        private void HandleOnTenantChanged(object? _, int id)
+        {
+            CurrentTenantId = id;
+
+            _tenantService.OnTenantChanged -= HandleOnTenantChanged;
+        }
+
+        public int CurrentTenantId { get; set; }
 
         public DbSet<Act> Acts => Set<Act>();
 

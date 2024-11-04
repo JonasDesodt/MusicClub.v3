@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MusicClub.v3.Api.ActionAttributes;
 using MusicClub.v3.Api.SourceGeneratorAttributes;
 using MusicClub.v3.DbCore.Models;
 using MusicClub.v3.Dto.Transfer;
 
 namespace MusicClub.v3.Api.Controllers
 {
+    [ApiKey]
     [ApiController]
     [Route("[controller]")]
     [GenerateControllers(

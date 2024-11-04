@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicClub.v3.DbCore;
 
@@ -11,9 +12,11 @@ using MusicClub.v3.DbCore;
 namespace MusicClub.v3.DbCore.Migrations
 {
     [DbContext(typeof(MusicClubDbContext))]
-    partial class MusicClubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104080309_ApiKey")]
+    partial class ApiKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

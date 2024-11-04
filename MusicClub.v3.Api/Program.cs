@@ -2,6 +2,8 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.Api.Middleware;
+using MusicClub.v3.DbCore.Services;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Extensions;
 
@@ -34,8 +36,9 @@ builder.Services.AddDbContext<MusicClubDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-
 builder.Services.AddDbServices();
+
+builder.Services.AddScoped<TenantService>();
 
 var app = builder.Build();
 
@@ -45,6 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseHttpsRedirection();
 
