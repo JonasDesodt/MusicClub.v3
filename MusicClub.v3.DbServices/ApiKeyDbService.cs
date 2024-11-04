@@ -21,9 +21,11 @@ namespace MusicClub.v3.DbServices
             //todo => check if the key not already in the db
             await dbContext.ApiKeys.AddAsync(apiKeyRecord);
 
+            //todo => set all the non archived api keys as archived
+
             await dbContext.SaveChangesAsync();
 
-            return new ApiKeyDataResponse { ApiKey = apiKey }.Wrap(); // todo => return the api key
+            return new ApiKeyDataResponse { ApiKey = apiKey }.Wrap(); // todo => return the api key according to protocol
         }
 
         public Task<ServiceResult<ApiKeyDataResponse>> Delete(int id)

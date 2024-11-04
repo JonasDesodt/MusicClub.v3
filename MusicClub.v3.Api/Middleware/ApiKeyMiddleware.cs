@@ -33,7 +33,7 @@ namespace MusicClub.v3.Api.Middleware
                 }
                 else
                 {
-                    var apiKeyRecord = dbContext.ApiKeys.FirstOrDefault(x => x.Id == tenant.Id && x.Archived == null);
+                    var apiKeyRecord = dbContext.ApiKeys.FirstOrDefault(x => x.TenantId == tenant.Id && x.Archived == null);
                     if (apiKeyRecord is null)
                     {
                         context.Items["API_Key_Authenticated"] = false;
