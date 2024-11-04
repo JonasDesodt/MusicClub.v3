@@ -26,7 +26,7 @@ namespace MusicClub.v3.DbServices
                 return ((PersonDataResponse?)null).Wrap(new ServiceMessages().AddNotFound(nameof(Image), request.ImageId).AddNotCreated(nameof(Person)));
             }
 
-            var person = request.ToModel();
+            var person = request.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.People.AddAsync(person);
 

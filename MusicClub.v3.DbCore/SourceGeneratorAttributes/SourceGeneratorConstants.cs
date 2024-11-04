@@ -11,5 +11,6 @@
         public const string Mappers = "Mappers";
         public const string Created = "Created";
         public const string Updated = "Updated";
+        public const string TenantId = "TenantId";
     }
 }

@@ -24,7 +24,7 @@ namespace MusicClub.v3.DbServices
                 return ((LineupDataResponse?)null).Wrap(new ServiceMessages().AddNotFound(nameof(Image), request.ImageId).AddNotCreated(nameof(Lineup)));
             }
 
-            var lineup = request.ToModel();
+            var lineup = request.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.Lineups.AddAsync(lineup);
 

@@ -12,6 +12,7 @@ namespace MusicClub.v3.DbCore.SourceGeneratorAttributes
 
         public const string Created = SourceGeneratorConstants.Created;
         public const string Updated = SourceGeneratorConstants.Updated;
+        public const string TenantId = SourceGeneratorConstants.TenantId;
 
         public const string DataRequestClassNameSuffix = SourceGeneratorConstants.Data + SourceGeneratorConstants.Request;
         public const string InterfacePrefix = "I";

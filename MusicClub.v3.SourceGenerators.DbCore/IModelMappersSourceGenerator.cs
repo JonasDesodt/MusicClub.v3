@@ -73,7 +73,12 @@ namespace MusicClub.v3.SourceGenerators.DbCore
                     continue;
                 }
 
-                var source = ClassStrings.GetIModelToModelString(@namespace, classname, modelType, properties, additionalProperties, interfaceType, created, updated);
+                if (!(attributeData.GetPropertyValue("TenantId") is string tenantId))
+                {
+                    continue;
+                }
+
+                var source = ClassStrings.GetIModelToModelString(@namespace, classname, modelType, properties, additionalProperties, interfaceType, created, updated, tenantId);
 
                 context.AddSource(classname + NamingConventions.FileExtension, source);
             }

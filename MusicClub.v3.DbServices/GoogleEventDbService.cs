@@ -77,7 +77,8 @@ namespace MusicClub.v3.DbServices
                 Created = now,
                 Updated = now,
                 GoogleCalendarId = googleCalendar.Id,
-                GoogleIdentifier = eventResponse.Id                
+                GoogleIdentifier = eventResponse.Id,
+                TenantId = dbContext.CurrentTenantId
             };
 
             await dbContext.GoogleEvents.AddAsync(googleEvent);

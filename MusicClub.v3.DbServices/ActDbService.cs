@@ -31,7 +31,7 @@ namespace MusicClub.v3.DbServices
                 return ((ActDataResponse?)null).Wrap(new ServiceMessages().AddNotFound(nameof(Image), dataRequest.ImageId).AddNotCreated(nameof(Act)));
             }
 
-            var act = dataRequest.ToModel();
+            var act = dataRequest.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.Acts.AddAsync(act);
 

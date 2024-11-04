@@ -5,7 +5,7 @@ namespace MusicClub.v3.DbServices.Extensions.Image
 {
     public static class ImageDbRequestExtensions
     {
-        public static DbCore.Models.Image? ToModel(this ImageDbDataRequest request)
+        public static DbCore.Models.Image? ToModel(this ImageDbDataRequest request, int tenantId)
         {
             var now = DateTime.UtcNow;
 
@@ -17,7 +17,8 @@ namespace MusicClub.v3.DbServices.Extensions.Image
                     Updated = now,
                     Alt = request.Alt,
                     Content = request.Content,
-                    ContentType = request.ContentType
+                    ContentType = request.ContentType,
+                    TenantId = tenantId
                 };
             }
             else

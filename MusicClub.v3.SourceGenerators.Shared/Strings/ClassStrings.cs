@@ -222,7 +222,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             return stringBuilder.ToString();
         }
 
-        public static string GetIModelToModelString(string @namespace, string iModel, string modelType, IEnumerable<string> modelProperties, IEnumerable<string> additionalModelProperties, string dataRequestType, string created, string updated)
+        public static string GetIModelToModelString(string @namespace, string iModel, string modelType, IEnumerable<string> modelProperties, IEnumerable<string> additionalModelProperties, string dataRequestType, string createdConst, string updatedConst, string tenantIdConst)
         {
             var stringBuilder = new StringBuilder();
 
@@ -234,10 +234,18 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             stringBuilder.AppendLine($"\tpublic static partial class {iModel}");
             stringBuilder.AppendLine($"\t{{");
 
-            stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} model)");
+            if (additionalModelProperties.Contains(tenantIdConst))
+            {
+                stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} model, int tenantId)");
+            }
+            else
+            {
+                stringBuilder.AppendLine($"\t\tpublic static {modelType} ToModel(this {dataRequestType} model)");
+            }
+
             stringBuilder.AppendLine($"\t\t{{");
 
-            if (additionalModelProperties.Any(x => x == created || x == updated))
+            if (additionalModelProperties.Any(x => x == createdConst || x == updatedConst))
             {
                 stringBuilder.AppendLine($"\t\t\tvar now = DateTime.UtcNow;");
                 stringBuilder.AppendLine();
@@ -252,9 +260,13 @@ namespace MusicClub.v3.SourceGenerators.Shared.Strings
             }
             foreach (var property in additionalModelProperties)
             {
-                if (property == created || property == updated)
+                if (property == createdConst || property == updatedConst)
                 {
                     stringBuilder.AppendLine($"\t\t\t\t{property} = now,");
+                }
+                else if (property == tenantIdConst)
+                {
+                    stringBuilder.AppendLine($"\t\t\t\t{property} = tenantId,");
                 }
                 else
                 {

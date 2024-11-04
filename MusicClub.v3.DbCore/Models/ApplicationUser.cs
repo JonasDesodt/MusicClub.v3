@@ -9,5 +9,7 @@ namespace MusicClub.v3.DbCore.Models
 
         public required int PersonId { get; set; }
         public Person? Person { get; set; }
+
+        public IList<Tenancy> Tenancies { get; set; } = [];
     }
 }

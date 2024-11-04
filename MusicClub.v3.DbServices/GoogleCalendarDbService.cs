@@ -23,7 +23,7 @@ namespace MusicClub.v3.DbServices
                 return EmptyDataResult.Wrap(new ServiceMessages().AddDuplicate(nameof(GoogleCalendar)).AddNotCreated(nameof(GoogleCalendar)));
             }
 
-            var googleCalendar = request.ToModel();
+            var googleCalendar = request.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.GoogleCalendars.AddAsync(googleCalendar);
 

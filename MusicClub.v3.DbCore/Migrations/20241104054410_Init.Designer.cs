@@ -12,7 +12,7 @@ using MusicClub.v3.DbCore;
 namespace MusicClub.v3.DbCore.Migrations
 {
     [DbContext(typeof(MusicClubDbContext))]
-    [Migration("20241103034952_Init")]
+    [Migration("20241104054410_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -191,6 +191,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<DateTime?>("Start")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -208,6 +211,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("ImageId");
 
                     b.HasIndex("LineupId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Acts");
                 });
@@ -308,6 +313,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
@@ -316,6 +324,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("ImageId");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Artists");
                 });
@@ -331,10 +341,15 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Bands");
                 });
@@ -360,6 +375,9 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
@@ -368,6 +386,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("BandId");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Bandnames");
                 });
@@ -383,10 +403,15 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Descriptions");
                 });
@@ -408,6 +433,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int>("LanguageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -420,6 +448,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("DescriptionId");
 
                     b.HasIndex("LanguageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("DescriptionTranslations");
                 });
@@ -439,10 +469,15 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Functions");
                 });
@@ -462,10 +497,15 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("GoogleCalendars");
                 });
@@ -488,12 +528,17 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GoogleCalendarId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("GoogleEvents");
                 });
@@ -521,10 +566,15 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Images");
                 });
@@ -550,6 +600,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int>("FunctionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
@@ -561,6 +614,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("ActId");
 
                     b.HasIndex("FunctionId");
+
+                    b.HasIndex("TenantId");
 
                     b.HasIndex("WorkerId");
 
@@ -607,6 +662,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -616,6 +674,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Lineups");
                 });
@@ -647,6 +707,9 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
@@ -659,6 +722,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.HasIndex("BandnameId");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Performances");
                 });
@@ -685,12 +750,17 @@ namespace MusicClub.v3.DbCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("People");
                 });
@@ -716,6 +786,9 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int>("LineupId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
@@ -728,9 +801,67 @@ namespace MusicClub.v3.DbCore.Migrations
 
                     b.HasIndex("LineupId");
 
+                    b.HasIndex("TenantId");
+
                     b.HasIndex("WorkerId");
 
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Tenancy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("Tenancies");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Tenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Tenants");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Worker", b =>
@@ -753,12 +884,17 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TenantId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
+
+                    b.HasIndex("TenantId");
 
                     b.ToTable("Workers");
                 });
@@ -837,6 +973,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Acts")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Description");
 
                     b.Navigation("GoogleEvent");
@@ -844,6 +986,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Image");
 
                     b.Navigation("Lineup");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.ApplicationUser", b =>
@@ -870,9 +1014,28 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Artists")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Image");
 
                     b.Navigation("Person");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Band", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Bands")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Bandname", b =>
@@ -887,9 +1050,28 @@ namespace MusicClub.v3.DbCore.Migrations
                         .WithMany()
                         .HasForeignKey("ImageId");
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Bandnames")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Band");
 
                     b.Navigation("Image");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Description", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Descriptions")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.DescriptionTranslation", b =>
@@ -906,9 +1088,39 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("DescriptionTranslations")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Description");
 
                     b.Navigation("Language");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Function", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Functions")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.GoogleCalendar", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("GoogleCalendars")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.GoogleEvent", b =>
@@ -919,7 +1131,26 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("GoogleEvents")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("GoogleCalendar");
+
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Image", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Images")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Job", b =>
@@ -936,6 +1167,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Jobs")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MusicClub.v3.DbCore.Models.Worker", "Worker")
                         .WithMany("Jobs")
                         .HasForeignKey("WorkerId")
@@ -945,6 +1182,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Act");
 
                     b.Navigation("Function");
+
+                    b.Navigation("Tenant");
 
                     b.Navigation("Worker");
                 });
@@ -956,7 +1195,15 @@ namespace MusicClub.v3.DbCore.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Lineups")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Image");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Performance", b =>
@@ -982,6 +1229,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Performances")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Act");
 
                     b.Navigation("Artist");
@@ -989,6 +1242,8 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Bandname");
 
                     b.Navigation("Image");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Person", b =>
@@ -998,7 +1253,15 @@ namespace MusicClub.v3.DbCore.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("People")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Image");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Service", b =>
@@ -1015,6 +1278,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Services")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MusicClub.v3.DbCore.Models.Worker", "Worker")
                         .WithMany("Services")
                         .HasForeignKey("WorkerId")
@@ -1025,7 +1294,28 @@ namespace MusicClub.v3.DbCore.Migrations
 
                     b.Navigation("Lineup");
 
+                    b.Navigation("Tenant");
+
                     b.Navigation("Worker");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Tenancy", b =>
+                {
+                    b.HasOne("MusicClub.v3.DbCore.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Tenancies")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Tenancies")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Worker", b =>
@@ -1036,7 +1326,15 @@ namespace MusicClub.v3.DbCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MusicClub.v3.DbCore.Models.Tenant", "Tenant")
+                        .WithMany("Workers")
+                        .HasForeignKey("TenantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Person");
+
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Act", b =>
@@ -1044,6 +1342,11 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("Jobs");
 
                     b.Navigation("Performances");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Tenancies");
                 });
 
             modelBuilder.Entity("MusicClub.v3.DbCore.Models.Artist", b =>
@@ -1115,6 +1418,43 @@ namespace MusicClub.v3.DbCore.Migrations
                     b.Navigation("ApplicationUsers");
 
                     b.Navigation("Artists");
+
+                    b.Navigation("Workers");
+                });
+
+            modelBuilder.Entity("MusicClub.v3.DbCore.Models.Tenant", b =>
+                {
+                    b.Navigation("Acts");
+
+                    b.Navigation("Artists");
+
+                    b.Navigation("Bandnames");
+
+                    b.Navigation("Bands");
+
+                    b.Navigation("DescriptionTranslations");
+
+                    b.Navigation("Descriptions");
+
+                    b.Navigation("Functions");
+
+                    b.Navigation("GoogleCalendars");
+
+                    b.Navigation("GoogleEvents");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Jobs");
+
+                    b.Navigation("Lineups");
+
+                    b.Navigation("People");
+
+                    b.Navigation("Performances");
+
+                    b.Navigation("Services");
+
+                    b.Navigation("Tenancies");
 
                     b.Navigation("Workers");
                 });

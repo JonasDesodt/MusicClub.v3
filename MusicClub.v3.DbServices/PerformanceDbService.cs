@@ -42,7 +42,7 @@ namespace MusicClub.v3.DbServices
                 return ((PerformanceDataResponse?)null).Wrap(new ServiceMessages().AddNotFound(nameof(Image), request.ImageId).AddNotCreated(nameof(Performance)));
             }
 
-            var performance = request.ToModel();
+            var performance = request.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.Performances.AddAsync(performance);
 

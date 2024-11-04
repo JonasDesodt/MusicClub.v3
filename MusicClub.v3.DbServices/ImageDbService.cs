@@ -16,7 +16,7 @@ namespace MusicClub.v3.DbServices
     {
         public async Task<ServiceResult<ImageDataResponse>> Create(ImageDbDataRequest request)
         {
-            var image = request.ToModel();
+            var image = request.ToModel(dbContext.CurrentTenantId);
 
             if (image is null)
             {

@@ -26,81 +26,6 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bands",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Descriptions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Descriptions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Functions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Functions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "GoogleCalendars",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GoogleIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GoogleCalendars", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Languages",
                 columns: table => new
                 {
@@ -113,6 +38,21 @@ namespace MusicClub.v3.DbCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tenants",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenants", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,99 +77,113 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GoogleEvents",
+                name: "Bands",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GoogleIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    GoogleCalendarId = table.Column<int>(type: "int", nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GoogleEvents", x => x.Id);
+                    table.PrimaryKey("PK_Bands", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GoogleEvents_GoogleCalendars_GoogleCalendarId",
-                        column: x => x.GoogleCalendarId,
-                        principalTable: "GoogleCalendars",
+                        name: "FK_Bands_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bandnames",
+                name: "Descriptions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageId = table.Column<int>(type: "int", nullable: true),
-                    BandId = table.Column<int>(type: "int", nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bandnames", x => x.Id);
+                    table.PrimaryKey("PK_Descriptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Bandnames_Bands_BandId",
-                        column: x => x.BandId,
-                        principalTable: "Bands",
+                        name: "FK_Descriptions_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Bandnames_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id");
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Lineups",
+                name: "Functions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Doors = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageId = table.Column<int>(type: "int", nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lineups", x => x.Id);
+                    table.PrimaryKey("PK_Functions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lineups_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
+                        name: "FK_Functions_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "People",
+                name: "GoogleCalendars",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageId = table.Column<int>(type: "int", nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    GoogleIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.PrimaryKey("PK_GoogleCalendars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_People_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
+                        name: "FK_GoogleCalendars_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ContentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,6 +194,7 @@ namespace MusicClub.v3.DbCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     DescriptionId = table.Column<int>(type: "int", nullable: false)
@@ -259,6 +214,136 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DescriptionTranslations_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GoogleEvents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    GoogleIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GoogleCalendarId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GoogleEvents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GoogleEvents_GoogleCalendars_GoogleCalendarId",
+                        column: x => x.GoogleCalendarId,
+                        principalTable: "GoogleCalendars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GoogleEvents_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Bandnames",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true),
+                    BandId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bandnames", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bandnames_Bands_BandId",
+                        column: x => x.BandId,
+                        principalTable: "Bands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bandnames_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Bandnames_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lineups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Doors = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lineups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lineups_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Lineups_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "People",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_People", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_People_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_People_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -267,12 +352,13 @@ namespace MusicClub.v3.DbCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Duration = table.Column<int>(type: "int", nullable: true),
-                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     LineupId = table.Column<int>(type: "int", nullable: false),
                     GoogleEventId = table.Column<int>(type: "int", nullable: true),
@@ -305,6 +391,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "Lineups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Acts_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -315,6 +407,7 @@ namespace MusicClub.v3.DbCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
                     Alias = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PersonId = table.Column<int>(type: "int", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true)
@@ -334,6 +427,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "People",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Artists_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -376,10 +475,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsTechnician = table.Column<bool>(type: "bit", nullable: false),
-                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    IsTechnician = table.Column<bool>(type: "bit", nullable: false),
+                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
                     PersonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -391,6 +491,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "People",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Workers_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -399,9 +505,10 @@ namespace MusicClub.v3.DbCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Instrument = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Instrument = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     ArtistId = table.Column<int>(type: "int", nullable: false),
                     ActId = table.Column<int>(type: "int", nullable: false),
@@ -433,6 +540,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "Images",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Performances_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -521,14 +634,43 @@ namespace MusicClub.v3.DbCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tenancies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenancies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tenancies_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tenancies_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Jobs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkerId = table.Column<int>(type: "int", nullable: false),
                     FunctionId = table.Column<int>(type: "int", nullable: false),
                     ActId = table.Column<int>(type: "int", nullable: false)
@@ -549,6 +691,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Jobs_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Jobs_Workers_WorkerId",
                         column: x => x.WorkerId,
                         principalTable: "Workers",
@@ -562,9 +710,10 @@ namespace MusicClub.v3.DbCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkerId = table.Column<int>(type: "int", nullable: false),
                     FunctionId = table.Column<int>(type: "int", nullable: false),
                     LineupId = table.Column<int>(type: "int", nullable: false)
@@ -584,6 +733,12 @@ namespace MusicClub.v3.DbCore.Migrations
                         principalTable: "Lineups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Services_Tenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "Tenants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Services_Workers_WorkerId",
                         column: x => x.WorkerId,
@@ -615,6 +770,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "LineupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Acts_TenantId",
+                table: "Acts",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Artists_ImageId",
                 table: "Artists",
                 column: "ImageId");
@@ -623,6 +783,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 name: "IX_Artists_PersonId",
                 table: "Artists",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Artists_TenantId",
+                table: "Artists",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -679,6 +844,21 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bandnames_TenantId",
+                table: "Bandnames",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bands_TenantId",
+                table: "Bands",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Descriptions_TenantId",
+                table: "Descriptions",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DescriptionTranslations_DescriptionId",
                 table: "DescriptionTranslations",
                 column: "DescriptionId");
@@ -689,9 +869,34 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DescriptionTranslations_TenantId",
+                table: "DescriptionTranslations",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Functions_TenantId",
+                table: "Functions",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GoogleCalendars_TenantId",
+                table: "GoogleCalendars",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GoogleEvents_GoogleCalendarId",
                 table: "GoogleEvents",
                 column: "GoogleCalendarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GoogleEvents_TenantId",
+                table: "GoogleEvents",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_TenantId",
+                table: "Images",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_ActId",
@@ -704,6 +909,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "FunctionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Jobs_TenantId",
+                table: "Jobs",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Jobs_WorkerId",
                 table: "Jobs",
                 column: "WorkerId");
@@ -714,9 +924,19 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Lineups_TenantId",
+                table: "Lineups",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_People_ImageId",
                 table: "People",
                 column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_People_TenantId",
+                table: "People",
+                column: "TenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Performances_ActId",
@@ -739,6 +959,11 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Performances_TenantId",
+                table: "Performances",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Services_FunctionId",
                 table: "Services",
                 column: "FunctionId");
@@ -749,14 +974,40 @@ namespace MusicClub.v3.DbCore.Migrations
                 column: "LineupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_TenantId",
+                table: "Services",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Services_WorkerId",
                 table: "Services",
                 column: "WorkerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tenancies_ApplicationUserId",
+                table: "Tenancies",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenancies_TenantId",
+                table: "Tenancies",
+                column: "TenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tenants_Name",
+                table: "Tenants",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workers_PersonId",
                 table: "Workers",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workers_TenantId",
+                table: "Workers",
+                column: "TenantId");
         }
 
         /// <inheritdoc />
@@ -790,10 +1041,10 @@ namespace MusicClub.v3.DbCore.Migrations
                 name: "Services");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Tenancies");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Languages");
@@ -812,6 +1063,9 @@ namespace MusicClub.v3.DbCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Workers");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Descriptions");
@@ -833,6 +1087,9 @@ namespace MusicClub.v3.DbCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "Tenants");
         }
     }
 }

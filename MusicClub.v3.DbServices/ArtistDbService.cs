@@ -28,7 +28,7 @@ namespace MusicClub.v3.DbServices
                 return ((ArtistDataResponse?)null).Wrap(new ServiceMessages().AddNotFound(nameof(Image), request.ImageId).AddNotCreated(nameof(Artist)));
             }
 
-            var artist = request.ToModel();
+            var artist = request.ToModel(dbContext.CurrentTenantId);
 
             await dbContext.Artists.AddAsync(artist);
 

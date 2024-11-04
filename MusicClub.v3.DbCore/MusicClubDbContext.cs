@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace MusicClub.v3.DbCore
 {
     public class MusicClubDbContext(DbContextOptions<MusicClubDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
+        public int CurrentTenantId { get; set; } = 2;
+
         public DbSet<Act> Acts => Set<Act>();
 
         public DbSet<Artist> Artists => Set<Artist>();
@@ -37,11 +40,31 @@ namespace MusicClub.v3.DbCore
 
         public DbSet<Service> Services => Set<Service>();
 
+        public DbSet<Tenancy> Tenancies => Set<Tenancy>();
+
+        public DbSet<Tenant> Tenants => Set<Tenant>();
+
         public DbSet<Worker> Workers => Set<Worker>();
 
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Act>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Artist>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Band>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Bandname>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Description>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Function>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<DescriptionTranslation>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<GoogleCalendar>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<GoogleEvent>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Image>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Job>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Lineup>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Performance>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Service>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            builder.Entity<Worker>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+
             builder.Entity<Act>()
                 .HasOne(a => a.Description)
                 .WithMany(i => i.Acts)
@@ -72,8 +95,8 @@ namespace MusicClub.v3.DbCore
                 .HasOne(a => a.Image)
                 .WithMany(i => i.Artists)
                 .HasForeignKey(a => a.ImageId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
 
             builder.Entity<Artist>()
                 .HasOne(a => a.Person)
@@ -103,8 +126,8 @@ namespace MusicClub.v3.DbCore
                 .HasOne(g => g.Act)
                 .WithOne(a => a.GoogleEvent)
                 .HasForeignKey<Act>(a => a.GoogleEventId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
 
             builder.Entity<GoogleEvent>()
                 .HasOne(g => g.GoogleCalendar)
@@ -162,6 +185,13 @@ namespace MusicClub.v3.DbCore
                 .HasForeignKey(p => p.ActId)
                 .IsRequired(true);
 
+            builder.Entity<Person>()
+               .HasOne(p => p.Image)
+               .WithMany(i => i.People)
+               .HasForeignKey(p => p.ImageId)
+               .OnDelete(DeleteBehavior.SetNull)
+               .IsRequired(false);
+
             builder.Entity<Service>()
                  .HasOne(s => s.Worker)
                  .WithMany(w => w.Services)
@@ -180,12 +210,136 @@ namespace MusicClub.v3.DbCore
                 .HasForeignKey(s => s.LineupId)
                 .IsRequired(true);
 
-            builder.Entity<Person>()
-                .HasOne(p => p.Image)
-                .WithMany(i => i.People)
-                .HasForeignKey(p => p.ImageId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
+            builder.Entity<Tenancy>()
+                .HasOne(t => t.Tenant)
+                .WithMany(t => t.Tenancies)
+                .HasForeignKey(t => t.TenantId)
+                .IsRequired(true);
+
+            builder.Entity<Tenancy>()
+                .HasOne(t => t.ApplicationUser)
+                .WithMany(a => a.Tenancies)
+                .HasForeignKey(t => t.ApplicationUserId)
+                .IsRequired(true);
+
+            builder.Entity<Tenant>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Acts)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Artists)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Bands)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Bandnames)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Descriptions)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.DescriptionTranslations)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Functions)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.GoogleCalendars)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.GoogleEvents)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Images)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Jobs)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Lineups)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Performances)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Tenant>()
+               .HasMany(t => t.People)
+               .WithOne(a => a.Tenant)
+               .HasForeignKey(a => a.TenantId)
+               .IsRequired(true)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Services)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            builder.Entity<Tenant>()
+                .HasMany(t => t.Workers)
+                .WithOne(a => a.Tenant)
+                .HasForeignKey(a => a.TenantId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Worker>()
                 .HasOne(w => w.Person)
