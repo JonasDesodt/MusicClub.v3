@@ -2,10 +2,10 @@
 using MusicClub.v3.DbCore;
 using MusicClub.v3.Dto.Transfer;
 
-namespace MusicClub.v3.Api.Controllers
+namespace MusicClub.v3.Api.Controllers.Private
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("private/[controller]")]
     public class ImageController(IImageDbService imageDbService, MusicClubDbContext dbContext) : Controller
     {
         [HttpGet("{id:int}")]

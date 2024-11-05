@@ -4,11 +4,10 @@ using MusicClub.v3.Api.SourceGeneratorAttributes;
 using MusicClub.v3.DbCore.Models;
 using MusicClub.v3.Dto.Transfer;
 
-namespace MusicClub.v3.Api.Controllers
+namespace MusicClub.v3.Api.Controllers.Private
 {
-    [ApiKey]
     [ApiController]
-    [Route("[controller]")]
+    [Route("private/[controller]")]
     [GenerateControllers(
         nameof(Act),
         nameof(ApiKey),
