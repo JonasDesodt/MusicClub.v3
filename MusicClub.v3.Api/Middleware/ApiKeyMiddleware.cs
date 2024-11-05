@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MusicClub.v3.DbCore;
-using MusicClub.v3.DbCore.Providers;
+﻿using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Helpers;
-using System.Net;
 
 namespace MusicClub.v3.Api.Middleware
 {
