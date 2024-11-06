@@ -10,7 +10,7 @@ namespace MusicClub.v3.Api.ActionAttributes
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.HttpContext.Items["API_Key_Authenticated"] is not int id)
+            if (context.HttpContext.Items["API_Key_Authenticated"] is not int _ )
             {
                 context.Result = new ContentResult()
                 {
@@ -20,9 +20,6 @@ namespace MusicClub.v3.Api.ActionAttributes
 
                 return;
             }      
-
-            var tenantService = context.HttpContext.RequestServices.GetRequiredService<TenantProvider>();
-            tenantService.Id = id;
 
             await next();
         }

@@ -76,7 +76,7 @@ namespace MusicClub.v3.DbCore
             builder.Entity<DescriptionTranslation>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
             builder.Entity<GoogleCalendar>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
             builder.Entity<GoogleEvent>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
-            builder.Entity<Image>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
+            //builder.Entity<Image>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
             builder.Entity<Job>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
             builder.Entity<Lineup>().HasQueryFilter(e => e.TenantId == CurrentTenantId);
             builder.Entity<Performance>().HasQueryFilter(e => e.TenantId == CurrentTenantId);

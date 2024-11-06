@@ -49,11 +49,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ApiKeyMiddleware>();
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<TenantMiddleware>();
 
 app.MapControllers();
 

@@ -1,51 +1,23 @@
-﻿using MusicClub.v3.DbCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Helpers;
 
 namespace MusicClub.v3.Api.Middleware
 {
-    public class ApiKeyMiddleware(RequestDelegate next, IServiceScopeFactory serviceScopeFactory)
+    public class ApiKeyMiddleware(RequestDelegate next)
     {
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, MusicClubDbContext dbContext)
         {
-            if (!context.Request.Headers.TryGetValue("Api-Key", out var extractedApiKey))
+            context.Items["API_Key_Authenticated"] = false;
+
+            if (context.Request.Headers.TryGetValue("Api-Key", out var extractedApiKey)
+                && context.Request.Headers.TryGetValue("Application-Name", out var extractedApplicationName)
+                && dbContext.Tenants.SingleOrDefault(t => t.Name == extractedApplicationName.ToString()) is { } tenant
+                && dbContext.ApiKeys.FirstOrDefault(x => x.TenantId == tenant.Id && x.Archived == null) is { } apiKey
+                // todo => add check if the key is not too old? eg 1 year
+                && ApiKeyHelper.ValidateApiKey(apiKey, extractedApiKey.ToString()))
             {
-                context.Items["API_Key_Authenticated"] = false;
-            }
-
-            if (!context.Request.Headers.TryGetValue("Application-Name", out var extractedApplicationName))
-            {
-                context.Items["API_Key_Authenticated"] = false;
-            }
-
-            using (var scope = serviceScopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<MusicClubDbContext>();
-
-                var tenant = dbContext.Tenants.SingleOrDefault(t => t.Name == extractedApplicationName.ToString());
-
-                if (tenant is null)
-                {
-                    context.Items["API_Key_Authenticated"] = false;
-                }
-                else
-                {
-                    var apiKeyRecord = dbContext.ApiKeys.FirstOrDefault(x => x.TenantId == tenant.Id && x.Archived == null);
-                    if (apiKeyRecord is null)
-                    {
-                        context.Items["API_Key_Authenticated"] = false;
-                    }
-                    else
-                    {
-                        if (ApiKeyHelper.ValidateApiKey(apiKeyRecord, extractedApiKey.ToString()))
-                        {
-                            context.Items["API_Key_Authenticated"] = tenant.Id;
-                        }
-                        else
-                        {
-                            context.Items["API_Key_Authenticated"] = false;
-                        }
-                    }
-                }
+                context.Items["API_Key_Authenticated"] = tenant.Id;
             }
 
             await next(context);

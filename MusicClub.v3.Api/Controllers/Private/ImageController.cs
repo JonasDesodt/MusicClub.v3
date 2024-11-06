@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MusicClub.v3.Api.ActionAttributes;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.Dto.Transfer;
 
 namespace MusicClub.v3.Api.Controllers.Private
 {
+
+
     [ApiController]
     [Route("private/[controller]")]
     public class ImageController(IImageDbService imageDbService, MusicClubDbContext dbContext) : Controller

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace MusicClub.v3.Dto.Data.Request
 {
     public class ImageApiDataRequest
-    {
+    {       
         [Required] // todo: test
         public required string Alt { get; set; }
 

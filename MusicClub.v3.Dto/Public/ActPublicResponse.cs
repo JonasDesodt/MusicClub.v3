@@ -7,7 +7,7 @@
         public string? Title { get; set; }
         public DateTime? Start { get; set; }
         public int? Duration { get; set; }
-
+        public string? Description { get; set; }
         public ImagePublicResponse? Image { get; set; }
     }
 }
