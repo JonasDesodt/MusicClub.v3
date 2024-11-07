@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+
+
+<div class="@(isMenuOpen ? "menu" : "")">
+    <header>
+        <div>
+            <h1>
+                <a href="">
+                    <img src="favicon.png" alt="Blazor favicon" />
+
+                    <span>Music Club CMS</span>
+                </a>
+            </h1>
+
+            <AuthorizeView>
+                <Authorized>
+                    <button type="button" @onclick="() => isMenuOpen = !isMenuOpen">
+                        @(isMenuOpen ? "Close" : "Menu")
+                    </button>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+
+        <nav>
+            <div>
+                <ul>
+                    <li>
+                        <a href="/act">Act</a>
+                    </li>
+                </ul>
+
+                <ul>
+                    <li>
+                        <a href="login" @onclick="() => isMenuOpen = false">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        @Body
+    </main>
+
+    <footer>
+    </footer>
+</div>
+
+
+@code {
+    private bool isMenuOpen = false;
+}

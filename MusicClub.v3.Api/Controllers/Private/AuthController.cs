@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MusicClub.v3.DbCore.Models;
+using MusicClub.v3.Dto.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,10 +13,15 @@ namespace MusicClub.v3.Api.Controllers.Private
     public class AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration) : ControllerBase
     {
         [HttpPost("token")]
-        public async Task<IActionResult> Token([FromForm] string username, [FromForm] string password)
+        public async Task<IActionResult> Token(TokenAuthRequest tokenAuthRequest)//[FromForm] string username, [FromForm] string password)
         {
-            var user = await userManager.FindByNameAsync(username);
-            if (user == null || !await userManager.CheckPasswordAsync(user, password))
+            if (!ModelState.IsValid)
+            {
+                return Unauthorized();
+            }
+
+            var user = await userManager.FindByNameAsync(tokenAuthRequest.Emailaddress);//username);
+            if (user == null || !await userManager.CheckPasswordAsync(user, tokenAuthRequest.Password))// password))
             {
                 return Unauthorized();
             }

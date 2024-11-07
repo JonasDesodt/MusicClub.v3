@@ -1,0 +1,76 @@
+header {
+    background-color: rgb(25,25,25);
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+}
+
+    header * {
+        color: rgb(255,255,255);
+    }
+
+    header a {
+        text-decoration: none;
+    }
+
+    header > div {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+        header > div > h1 > a {
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            gap: .5em;
+        }
+
+        header > div > button {
+            align-self: flex-end;
+            /*temp*/
+            background-color: transparent;
+            border: none;
+            font-weight: bold;
+        }
+
+    header > nav {
+        display: none;
+    }
+
+    header > nav > div > ul {
+        display: flex;
+        flex-direction: column;
+        list-style-type: none;
+    }
+
+main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 2em 1em;
+}
+
+main > ::deep form { /* positions the login form in the middle of main */
+    flex-grow: 1;
+    justify-content: center;
+}
+
+div.menu > header {
+    flex-grow: 1;
+}
+
+div.menu > header > nav {
+    display: flex;
+}
+
+div.menu > main,
+div.menu > footer {
+    display: none;
+}
+
+@media (max-width: 640.98px) {
+}
+
+@media (min-width: 641px) {
+}

@@ -1,0 +1,34 @@
+﻿@page "/login";
+
+@layout MainLayout
+
+@using MusicClub.v3.Cms.FormModels.Auth
+@using MusicClub.v3.Dto.Auth;
+
+<EditForm Model="loginAuthFormModel">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+
+    <label>
+        <span>Email</span>
+        
+        <InputText @bind-Value="loginAuthFormModel.Emailaddress" id="emailddress"/>
+
+        <ValidationMessage For="() => loginAuthFormModel.Emailaddress"/>
+    </label>
+
+    <label>
+        <span>Password</span>
+
+        <InputText @bind-Value="loginAuthFormModel.Password" type="password" id="password"/>
+
+        <ValidationMessage For="() => loginAuthFormModel.Password"/>
+    </label>
+
+    <ul class="buttons">
+        <li><button type="submit">Login</button></li>
+    </ul>
+</EditForm>
+
+@code {
+    private readonly LoginAuthFormModel loginAuthFormModel = new();
+}
