@@ -55,7 +55,7 @@ namespace MusicClub.v3.DbServices
                 .IncludeAll()
                 .ToResponses()
                 .FirstOrDefaultAsync(p => p.Id == id))
-                .Wrap(new ServiceMessages().AddNotFound(nameof(Person), id));
+                .Wrap(new ServiceMessages().AddNotFound(nameof(Image), id));
         }
 
         public async Task<PagedServiceResult<IList<ImageDataResponse>, ImageFilterResponse>> GetAll(PaginationRequest paginationRequest, ImageFilterRequest filterRequest)

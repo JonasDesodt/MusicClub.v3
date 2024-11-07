@@ -75,11 +75,11 @@ builder.Services.AddDbContext<MusicClubDbContext>(options =>
 
 builder.Services.AddDbServices();
 
-//var jwtSettings = new JwtSettings();
-//builder.Configuration.GetSection(nameof(JwtSettings)).Bind(jwtSettings);
-//builder.Services.AddSingleton(jwtSettings);
-
 var secret = builder.Configuration["JwtSettings:Secret"];
+if (string.IsNullOrEmpty(secret))
+{
+    throw new InvalidOperationException("JWT Secret is missing in configuration.");
+}
 
 // within this section we are configuring the authentication and setting the default scheme
 builder.Services.AddAuthentication(options =>
@@ -99,7 +99,7 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(key), // Add the secret key to our Jwt encryption
             ValidateIssuer = false,
             ValidateAudience = false,
-            RequireExpirationTime = false,
+            RequireExpirationTime = true,
             ValidateLifetime = true
         };
     });

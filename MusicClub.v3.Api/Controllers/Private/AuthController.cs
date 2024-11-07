@@ -29,18 +29,19 @@ namespace MusicClub.v3.Api.Controllers.Private
         {
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-          };
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? throw new NullReferenceException("The IdentityUser has no username.")),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.")));
+
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
                 audience: configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(1),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
