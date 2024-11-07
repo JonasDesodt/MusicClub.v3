@@ -1,27 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MusicClub.v3.DbCore.Providers;
 
 namespace MusicClub.v3.DbCore
 {
-    public class MusicClubDbContext : IdentityDbContext<ApplicationUser>
+    public class MusicClubDbContext(DbContextOptions<MusicClubDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
-        private readonly TenantProvider _tenantProvider;
-
-        public MusicClubDbContext(DbContextOptions<MusicClubDbContext> options, TenantProvider tenantProvider) : base(options)
-        {
-            _tenantProvider = tenantProvider;
-
-            _tenantProvider.OnTenantChanged += HandleOnTenantChanged;
-        }
-
-        private void HandleOnTenantChanged(object? _, int id)
-        {
-            CurrentTenantId = id;
-
-            _tenantProvider.OnTenantChanged -= HandleOnTenantChanged;
-        }
-
         public int CurrentTenantId { get; set; }
 
         public DbSet<Act> Acts => Set<Act>();
@@ -373,6 +357,42 @@ namespace MusicClub.v3.DbCore
 
             base.OnModelCreating(builder);
 
+        }
+
+        public async Task AddDefaultUser()
+        {
+            var now = DateTime.UtcNow;
+
+            var person = new Person
+            {
+                Created = now,
+                Updated = now,
+                Firstname = "Jonas",
+                Lastname = "Desodt",
+                TenantId = 1
+            };
+
+            People.Add(person);
+            await SaveChangesAsync();
+                           
+            var userEmail = "jonasdesodt@gmail.com";
+            var appUser = new ApplicationUser
+            {
+                Created = now,
+                Updated = now,
+                PersonId = person.Id,
+                Email = userEmail,
+                NormalizedEmail = userEmail.ToUpper(),
+                UserName = userEmail,
+                NormalizedUserName = userEmail.ToUpper(),
+                ConcurrencyStamp = "9d898cd7-2227-44ed-8fb2-3468d2145aae",
+                SecurityStamp = "N7URV5X4PI2IFC3I32AVDCDC4Y7XSMAQ",
+                PasswordHash =
+                    "AQAAAAIAAYagAAAAEL5uZw6smTCysavHMSzc4In30igjGfcG7B6b3rFgDpiTl33+D7dbEjsEevWd2a6rIQ==", //Test123$
+            };
+            Users.Add(appUser);
+
+            await SaveChangesAsync();
         }
     }
 }

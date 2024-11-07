@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using MusicClub.v3.DbCore;
-using MusicClub.v3.DbCore.Models;
-using MusicClub.v3.DbCore.Providers;
 
 namespace MusicClub.v3.Api.ActionAttributes
 {

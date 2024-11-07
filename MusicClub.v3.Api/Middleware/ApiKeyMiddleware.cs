@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MusicClub.v3.DbCore;
+﻿using MusicClub.v3.DbCore;
 using MusicClub.v3.DbServices.Helpers;
 
 namespace MusicClub.v3.Api.Middleware

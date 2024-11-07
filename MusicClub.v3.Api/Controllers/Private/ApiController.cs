@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MusicClub.v3.Api.ActionAttributes;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MusicClub.v3.Api.SourceGeneratorAttributes;
 using MusicClub.v3.DbCore.Models;
 using MusicClub.v3.Dto.Transfer;
 
 namespace MusicClub.v3.Api.Controllers.Private
 {
+    [Authorize]
     [ApiController]
     [Route("private/[controller]")]
     [GenerateControllers(

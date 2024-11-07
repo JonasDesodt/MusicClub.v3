@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MusicClub.v3.Api.ActionAttributes;
 using MusicClub.v3.DbCore;
 using MusicClub.v3.Dto.Transfer;
 
 namespace MusicClub.v3.Api.Controllers.Private
 {
-
-
+    [Authorize]
     [ApiController]
     [Route("private/[controller]")]
     public class ImageController(IImageDbService imageDbService, MusicClubDbContext dbContext) : Controller
@@ -34,6 +32,7 @@ namespace MusicClub.v3.Api.Controllers.Private
             return Ok(await imageDbService.GetAll(paginationRequest, filter));
         }
 
+        [AllowAnonymous]
         [HttpGet("Download/{id:int}")]
         public async Task<IActionResult> Download(int id)
         {
