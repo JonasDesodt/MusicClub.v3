@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MusicClub.v3.SourceGenerators.Shared\MusicClub.v3.SourceGenerators.Shared.csproj" OutputItemType="Analyzer" />
+	</ItemGroup>
+</Project>

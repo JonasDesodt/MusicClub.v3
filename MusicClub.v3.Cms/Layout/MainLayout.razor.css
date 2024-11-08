@@ -1,12 +1,13 @@
 header {
-    background-color: rgb(25,25,25);
+    background-color: var(--secondary-background-color);
     display: flex;
     flex-direction: column;
-    padding: 1em;
+    gap: calc(var(--layout-padding-bottom-top-main) + var(--layout-padding-bottom-top));
+    padding: var(--layout-padding-bottom-top) var(--layout-padding-left-right);
 }
 
     header * {
-        color: rgb(255,255,255);
+        color: var(--secondary-foreground-color);
     }
 
     header a {
@@ -57,7 +58,7 @@ main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 2em 1em;
+    padding: var(--layout-padding-bottom-top-main) var(--layout-padding-left-right);
 }
 
 main > ::deep form { /* positions the login form in the middle of main */
@@ -73,8 +74,7 @@ div.menu > header > nav {
     display: flex;
 }
 
-div.menu > main,
-div.menu > footer {
+div.menu > main {
     display: none;
 }
 

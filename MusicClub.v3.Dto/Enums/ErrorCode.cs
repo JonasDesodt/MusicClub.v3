@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace MusicClub.v3.Dto.Enums
+﻿namespace MusicClub.v3.Dto.Enums
 {
     public enum ErrorCode
     { 
