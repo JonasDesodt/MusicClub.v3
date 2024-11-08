@@ -16,7 +16,7 @@ namespace MusicClub.v3.Cms.Stores
                 return accessToken;
             }
 
-            return ""; // temp hack, use refresh token
+            return ""; // todo => temp hack, use refresh token
 
         }
 

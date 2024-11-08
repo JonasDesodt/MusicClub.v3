@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicClub.v3.Dto.Auth
+namespace MusicClub.v3.Dto.Auth.Request
 {
     public class TokenAuthRequest
     {

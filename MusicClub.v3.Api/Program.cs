@@ -104,10 +104,21 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
-IdentityBuilder identityBuilder = builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+//IdentityBuilder identityBuilder =   
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 }).AddEntityFrameworkStores<MusicClubDbContext>().AddDefaultTokenProviders();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowMusicClubCms",
+        builder => builder
+            .WithOrigins("https://localhost:7059")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
 
 var app = builder.Build();
 
@@ -123,6 +134,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowMusicClubCms");
 
 app.UseAuthentication();
 app.UseAuthorization();

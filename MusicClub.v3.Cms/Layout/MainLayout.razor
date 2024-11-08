@@ -1,6 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using MusicClub.v3.Abstractions
+
 @inherits LayoutComponentBase
 
+@inject ITokenStore TokenStore
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="@(isMenuOpen ? "menu" : "")">
     <header>
@@ -26,14 +30,28 @@
             <div>
                 <ul>
                     <li>
-                        <a href="/act">Act</a>
+                        <a href="/act" @onclick="() => isMenuOpen = false">Act</a>
                     </li>
                 </ul>
 
                 <ul>
-                    <li>
-                        <a href="login" @onclick="() => isMenuOpen = false">Login</a>
-                    </li>
+                    <AuthorizeView>
+                        <Authorized>
+                            <li>
+                                <a href="/profile">@context.User.Identity?.Name</a>
+                            </li>
+
+                            <li>
+                                <button type="button" @onclick="Logout">Logout</button>
+                            </li>
+                        </Authorized>
+
+                        <NotAuthorized>                           
+                            <li>
+                                <a href="login" @onclick="() => isMenuOpen = false">Login</a>
+                            </li>
+                        </NotAuthorized>
+                    </AuthorizeView>    
                 </ul>
             </div>
         </nav>
@@ -50,4 +68,13 @@
 
 @code {
     private bool isMenuOpen = false;
+
+    private async void Logout()
+    {
+        await TokenStore.RemoveToken();
+
+        await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        isMenuOpen = false;
+    }
 }

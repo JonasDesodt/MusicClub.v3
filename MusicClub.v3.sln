@@ -37,9 +37,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.IModels", "Mus
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cms", "Cms", "{3ADFB910-DB10-4FA5-A18E-5C33DF7C2210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.Cms", "MusicClub.v3.Cms\MusicClub.v3.Cms.csproj", "{C98571E9-7353-48BC-8138-AE7DF0437CCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Cms", "MusicClub.v3.Cms\MusicClub.v3.Cms.csproj", "{C98571E9-7353-48BC-8138-AE7DF0437CCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.ApiServices", "MusicClub.v3.ApiServices\MusicClub.v3.ApiServices.csproj", "{5465CDC5-60D9-4E49-9AB1-4262B955DB01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.ApiServices", "MusicClub.v3.ApiServices\MusicClub.v3.ApiServices.csproj", "{5465CDC5-60D9-4E49-9AB1-4262B955DB01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

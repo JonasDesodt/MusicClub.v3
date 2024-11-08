@@ -2,26 +2,35 @@
 
 @layout MainLayout
 
+@using MusicClub.v3.ApiServices
 @using MusicClub.v3.Cms.FormModels.Auth
+@using MusicClub.v3.Cms.Models
+@using MusicClub.v3.Cms.Services
 @using MusicClub.v3.Dto.Auth;
+@using MusicClub.v3.Dto.Auth.Request
 
-<EditForm Model="loginAuthFormModel">
+@inject AuthApiService AuthApiService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject LocalStorageService LocalStorageService
+@inject NavigationManager NavigationManager
+
+<EditForm Model="loginAuthFormModel" OnValidSubmit="ValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
 
     <label>
         <span>Email</span>
-        
-        <InputText @bind-Value="loginAuthFormModel.Emailaddress" id="emailddress"/>
 
-        <ValidationMessage For="() => loginAuthFormModel.Emailaddress"/>
+        <InputText @bind-Value="loginAuthFormModel.Emailaddress" id="emailddress" />
+
+        <ValidationMessage For="() => loginAuthFormModel.Emailaddress" />
     </label>
 
     <label>
         <span>Password</span>
 
-        <InputText @bind-Value="loginAuthFormModel.Password" type="password" id="password"/>
+        <InputText @bind-Value="loginAuthFormModel.Password" type="password" id="password" />
 
-        <ValidationMessage For="() => loginAuthFormModel.Password"/>
+        <ValidationMessage For="() => loginAuthFormModel.Password" />
     </label>
 
     <ul class="buttons">
@@ -30,5 +39,42 @@
 </EditForm>
 
 @code {
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
     private readonly LoginAuthFormModel loginAuthFormModel = new();
+
+    private async Task ValidSubmit()
+    {
+        if (loginAuthFormModel.Emailaddress is not { } emailAddress || loginAuthFormModel.Password is not { } password)
+        {
+            return;
+        }
+
+        var tokenAuthResponse = await AuthApiService.GetToken(new TokenAuthRequest
+            {
+                Emailaddress = emailAddress,
+                Password = password
+            });
+
+        if (tokenAuthResponse is not { } token)
+        {
+            // _signInFailed = true;
+
+            return;
+        }
+
+        await LocalStorageService.SetItem<LocalStorageToken>("Token", new LocalStorageToken
+            {
+                AccessToken = token.AccessToken,
+                ExpiresIn = token.ExpiresIn,
+                TokenType = token.TokenType,
+                Received = DateTime.UtcNow
+
+            });
+
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+
+        NavigationManager.NavigateTo(ReturnUrl ?? "/");
+    }
 }

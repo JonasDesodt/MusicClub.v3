@@ -35,12 +35,21 @@ header {
         }
 
     header > nav {
+        align-items: center;
         display: none;
+        flex-direction: column;
+    }
+
+    header > nav > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2em;
     }
 
     header > nav > div > ul {
         display: flex;
         flex-direction: column;
+        gap: .5em;
         list-style-type: none;
     }
 
