@@ -1,0 +1,39 @@
+﻿@if (TotalPages > 1)
+{
+    <div>
+        <EditForm Model="Model" OnValidSubmit="() => HandleOnClick(Model)">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+
+            <p>Page</p>
+            <InputNumber @bind-Value="Model.Page" min="1" max="@TotalPages" />
+            <p>of @TotalPages</p>
+
+            <button type="submit">Go</button>
+        </EditForm>
+    </div>
+}
+else
+{
+    <div>
+        <p>Page 1 of 1</p>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public required PaginationResponse Model { get; set; }
+
+    [Parameter]
+    public EventCallback<PaginationRequest> OnPageChanged { get; set; }
+
+    private int TotalPages => (int)Math.Ceiling(Model.TotalCount / (decimal)Model.PageSize);
+
+    private int StartPage => (Model.Page - 2) <= 0 ? 1 : Model.Page - 2;
+
+    private int EndPage => StartPage + 3 > TotalPages ? TotalPages : StartPage + 3;
+
+    private async Task HandleOnClick(PaginationResponse model)
+    {
+        await OnPageChanged.InvokeAsync(new PaginationRequest { Page = model.Page, PageSize = model.PageSize });
+    }
+}

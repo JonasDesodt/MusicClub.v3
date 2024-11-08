@@ -3,6 +3,7 @@ using MusicClub.v3.Dto.Enums;
 using MusicClub.v3.Dto.Transfer;
 using System.Net.Http.Json;
 using MusicClub.v3.Dto.Extensions;
+using MusicClub.v3.Dto.Helpers;
 
 namespace MusicClub.v3.ApiServices.Extensions
 {
@@ -59,11 +60,11 @@ namespace MusicClub.v3.ApiServices.Extensions
             return serviceResult;
         }
 
-        public static async Task<PagedServiceResult<IList<TDataResult>, TFilterResult>> GetAll<TDataResult, TFilterRequest, TFilterResult>(this IHttpClientFactory httpClientFactory, IFilterRequestHelpers<TFilterRequest, TFilterResult> filterRequestHelpers, string client, string endpoint, PaginationRequest paginationRequest, TFilterRequest filterRequest) //where TFilterRequest : IFilterRequestConverter<TFilterResult>
+        public static async Task<PagedServiceResult<IList<TDataResult>, TFilterResult>> GetAll<TDataResult, TFilterRequest, TFilterResult>(this IHttpClientFactory httpClientFactory, IFilterRequestHelpers<TFilterRequest, TFilterResult> filterRequestHelpers, string client, string endpoint, PaginationRequest paginationRequest, TFilterRequest filterRequest) where TFilterResult : new() //<= todo, temp hack, see blow (in the return) //where TFilterRequest : IFilterRequestConverter<TFilterResult>
         {
             var httpClient = httpClientFactory.CreateClient(client);
 
-            var httpResponseMessage = await TryCatchHelpers.HandleHttpRequestExceptions(async () => await httpClient.GetAsync(endpoint + paginationRequest.ToQueryString() + filterRequestHelpers.ToQueryString(filterRequest)));
+            var httpResponseMessage = await TryCatchHelpers.HandleHttpRequestExceptions(async () => await httpClient.GetAsync("private/" + endpoint + paginationRequest.ToQueryString() + filterRequestHelpers.ToQueryString(filterRequest)));
 
             //TODO: verify async implementation, also in HandleHttpRequestExceptions!!
 
@@ -76,7 +77,9 @@ namespace MusicClub.v3.ApiServices.Extensions
                 {
                     Messages = [new ServiceMessage { Code = ErrorCode.FetchError, Description = $"Failed to fetch the {typeof(TDataResult)}s." }],
                     PaginationResponse = paginationRequest.ToResponse(0),
-                    Filter = filterRequestHelpers.ToResult(filterRequest)
+                    Filter = new TFilterResult
+                    {
+                    }//TODO => temp hack ==> filterRequestHelpers.ToResult(filterRequest)
                 };
             }
 

@@ -1,0 +1,19 @@
+﻿div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+div > ::deep form {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 1em;
+        justify-content: center;
+    }
+
+div > ::deep form > input {
+        text-align: right;
+        width: 4em;
+    }
+

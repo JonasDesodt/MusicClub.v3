@@ -1,9 +1,41 @@
 ﻿@page "/"
 
+
 @attribute [Authorize(Policy = "ValidTokenOnly")]
+
+@inject IActService ActApiService;
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h2>Home</h2>
 
-Welcome to your new app.
+@if(pagedServiceResult is not null)
+{
+    <PagedList OnPageChanged="(model) => HandleOnPageChanged(model)"
+               PagedServiceResult="pagedServiceResult" Context="DataResult">
+        <ItemTemplate>
+            <ul>
+                <li>@DataResult.DataResult.Name</li>
+            </ul>
+        </ItemTemplate>
+    </PagedList>
+}
+
+
+
+
+@code {
+    private PagedServiceResult<IList<ActDataResponse>, ActFilterResponse>? pagedServiceResult;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pagedServiceResult = await ActApiService.GetAll(new PaginationRequest { Page = 1, PageSize = 12 }, new ActFilterRequest { });
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task HandleOnPageChanged(PaginationRequest paginationRequest)
+    {
+        pagedServiceResult = await ActApiService.GetAll(paginationRequest, new ActFilterRequest { });
+    }
+}

@@ -1,0 +1,51 @@
+﻿@typeparam TModel where TModel : class
+@typeparam TFilter
+
+@inject JsFunctions JsFunctions
+
+@if (PagedServiceResult?.Data is { } results)
+{
+    <section class="paged-list">
+        @if (PagedServiceResult.PaginationResponse.TotalCount == 1)
+        {
+            <h4>@PagedServiceResult.PaginationResponse.TotalCount result</h4>
+        }
+        else
+        {
+            <h4>@PagedServiceResult.PaginationResponse.TotalCount results</h4>
+        }
+
+        <button class="flex-end" @onclick="ToggleShowImages">@(ShowImages ? "Hide images" : "Show images")</button>
+
+        <ul class="data-list">
+            @foreach (var result in results)
+            {
+                <li>
+                    @ItemTemplate(new DataResultContext<TModel> { DataResult = result, ShowImages = ShowImages })
+                </li>
+            }
+        </ul>
+
+        <Pagination Model="PagedServiceResult.PaginationResponse"
+                    OnPageChanged="async (request) => { await OnPageChanged.InvokeAsync(request); await JsFunctions.ScrollToTop(); }" />
+    </section>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public PagedServiceResult<IList<TModel>, TFilter>? PagedServiceResult { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment<DataResultContext<TModel>> ItemTemplate { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public EventCallback<PaginationRequest> OnPageChanged { get; set; }
+
+    [Parameter]
+    public bool ShowImages { get; set; } = true;
+
+    private void ToggleShowImages()
+    {
+        ShowImages = !ShowImages;
+    }
+}

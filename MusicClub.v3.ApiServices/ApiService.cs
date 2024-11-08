@@ -2,7 +2,8 @@
 using MusicClub.v3.Abstractions.Services;
 using MusicClub.v3.ApiServices.Extensions;
 using MusicClub.v3.ApiServices.Helpers;
-using MusicClub.v3.ApiServices.Attributes;
+using MusicClub.v3.ApiServices.SourceGeneratorAttributes;
+using MusicClub.v3.Dto.Helpers;
 
 namespace MusicClub.v3.ApiServices
 {
@@ -21,7 +22,7 @@ namespace MusicClub.v3.ApiServices
         "Person",
         "Service",
         "Worker")]
-    public abstract class ApiService<TDataRequest, TDataResult, TFilterRequest, TFilterResult>(IHttpClientFactory httpClientFactory, IFilterRequestHelpers<TFilterRequest, TFilterResult> filterRequestHelpers) : IService<TDataRequest, TDataResult, TFilterRequest, TFilterResult> 
+    public abstract class ApiService<TDataRequest, TDataResult, TFilterRequest, TFilterResponse>(IHttpClientFactory httpClientFactory, IFilterRequestHelpers<TFilterRequest, TFilterResponse> filterRequestHelpers) : IService<TDataRequest, TDataResult, TFilterRequest, TFilterResponse> where TFilterResponse : new() //<= todo, temp hack, can be removed when the filterequesthelpers implement filterrequest toResponse()
     {
         protected abstract string Endpoint { get; }
 
@@ -45,9 +46,9 @@ namespace MusicClub.v3.ApiServices
             return await httpClientFactory.Get<TDataResult>("MusicClubApi", $"{Endpoint}/", id);
         }
 
-        public async Task<PagedServiceResult<IList<TDataResult>, TFilterResult>> GetAll(PaginationRequest paginationRequest, TFilterRequest filterRequest)
+        public async Task<PagedServiceResult<IList<TDataResult>, TFilterResponse>> GetAll(PaginationRequest paginationRequest, TFilterRequest filterRequest)
         {
-            return await httpClientFactory.GetAll<TDataResult, TFilterRequest, TFilterResult>(filterRequestHelpers, "MusicClubApi", $"{Endpoint}?", paginationRequest, filterRequest);
+            return await httpClientFactory.GetAll<TDataResult, TFilterRequest, TFilterResponse>(filterRequestHelpers, "MusicClubApi", $"{Endpoint}?", paginationRequest, filterRequest);
 
         }
 
