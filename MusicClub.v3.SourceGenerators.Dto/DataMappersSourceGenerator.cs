@@ -23,7 +23,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
             foreach (var (requestClassDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateDataMappers"))
             {
-                if (!(attributeData.GetPropertyValue("ValidationPattern") is string validationPattern))
+                if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
                 {
                     continue;
                 }
@@ -35,18 +35,18 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("ClassNameReplacePattern") is string classNameReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("ClassNameReplacePattern") is string classNameReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("ClassNameReplacement") is string classNameReplacement))
+                if (!(attributeData.GetConstPropertyValue("ClassNameReplacement") is string classNameReplacement))
                 {
                     continue;
                 }
 
                 var dataResponseClassname = Regex.Replace(dataRequestClassName, classNameReplacePattern, classNameReplacement);
 
-                if (!(attributeData.GetPropertyValue("ClassNameSuffix") is string classNameSuffix))
+                if (!(attributeData.GetConstPropertyValue("ClassNameSuffix") is string classNameSuffix))
                 {
                     continue;
                 }
@@ -54,11 +54,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 var dataRequestExtensionsClassname = dataRequestClassName + classNameSuffix;
                 var dataResponseExtensionsClassName =  dataResponseClassname + classNameSuffix;
 
-                if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
                 {
                     continue;
                 }
@@ -68,11 +68,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("Request") is string request))
+                if (!(attributeData.GetConstPropertyValue("Request") is string request))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("Response") is string response))
+                if (!(attributeData.GetConstPropertyValue("Response") is string response))
                 {
                     continue;
                 }

@@ -31,19 +31,19 @@ namespace MusicClub.v3.SourceGenerators.DbCore
                 //{
                 //    continue;
                 //}
-                if (!(attributeData.GetPropertyValue("InterfacePrefix") is string interfacePrefix))
+                if (!(attributeData.GetConstPropertyValue("InterfacePrefix") is string interfacePrefix))
                 {
                     continue;
                 }
 
                 var interfaceType = interfacePrefix + modelType;
 
-                if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
                 {
                     continue;
                 }
@@ -63,17 +63,17 @@ namespace MusicClub.v3.SourceGenerators.DbCore
 
                 var classname = interfaceType + "Extensions"; //get extension from the attribute?
 
-                if (!(attributeData.GetPropertyValue("Created") is string created))
+                if (!(attributeData.GetConstPropertyValue("Created") is string created))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("Updated") is string updated))
+                if (!(attributeData.GetConstPropertyValue("Updated") is string updated))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("TenantId") is string tenantId))
+                if (!(attributeData.GetConstPropertyValue("TenantId") is string tenantId))
                 {
                     continue;
                 }

@@ -3,16 +3,19 @@
 @layout MainLayout
 
 @using MusicClub.v3.ApiServices
+@using MusicClub.v3.Cms.Controllers
 @using MusicClub.v3.Cms.FormModels.Auth
 @using MusicClub.v3.Cms.Models
 @using MusicClub.v3.Cms.Services
 @using MusicClub.v3.Dto.Auth;
 @using MusicClub.v3.Dto.Auth.Request
+@using MusicClub.v3.Dto.Auth.Response
 
 @inject AuthApiService AuthApiService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject LocalStorageService LocalStorageService
 @inject NavigationManager NavigationManager
+@inject DataController DataController
 
 <EditForm Model="loginAuthFormModel" OnValidSubmit="ValidSubmit">
     <DataAnnotationsValidator></DataAnnotationsValidator>
@@ -51,11 +54,11 @@
             return;
         }
 
-        var tokenAuthResponse = await AuthApiService.GetToken(new TokenAuthRequest
+        var tokenAuthResponse = await DataController.Fetch<TokenAuthResponse?>(async () => await AuthApiService.GetToken(new TokenAuthRequest
             {
                 Emailaddress = emailAddress,
                 Password = password
-            });
+            }));
 
         if (tokenAuthResponse is not { } token)
         {

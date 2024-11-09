@@ -27,7 +27,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
             foreach (var (requestClassDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateFilterMappers"))
             {
-                if (!(attributeData.GetPropertyValue("ValidationPattern") is string validationPattern))
+                if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
                 {
                     continue;
                 }
@@ -39,18 +39,18 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("ClassNameReplacePattern") is string classNameReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("ClassNameReplacePattern") is string classNameReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("ClassNameReplacement") is string classNameReplacement))
+                if (!(attributeData.GetConstPropertyValue("ClassNameReplacement") is string classNameReplacement))
                 {
                     continue;
                 }
 
                 var filterResponseTypeName = Regex.Replace(filterRequestTypeName, classNameReplacePattern, classNameReplacement);
 
-                if (!(attributeData.GetPropertyValue("ClassNameSuffix") is string classNameSuffix))
+                if (!(attributeData.GetConstPropertyValue("ClassNameSuffix") is string classNameSuffix))
                 {
                     continue;
                 }
@@ -58,11 +58,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 var filterRequestExtensionsClassName = filterRequestTypeName + classNameSuffix;
                 var filterResponseExtensionsClassName = filterResponseTypeName + classNameSuffix;
 
-                if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
                 {
                     continue;
                 }
@@ -72,11 +72,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("Request") is string request))
+                if (!(attributeData.GetConstPropertyValue("Request") is string request))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("Response") is string response))
+                if (!(attributeData.GetConstPropertyValue("Response") is string response))
                 {
                     continue;
                 }
@@ -88,11 +88,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 var interfaceProperties = context.GetInterfacePropertiesFromAttributeConstructorParam(requestClassDeclarationSyntax, "GenerateFilterMappers");
                 var properties = context.GetPropertySymbols(requestClassDeclarationSyntax).Concat(interfaceProperties);
 
-                if (!(attributeData.GetPropertyValue("ForeignKeyReplacePattern") is string foreignKeyReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("ForeignKeyReplacePattern") is string foreignKeyReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
+                if (!(attributeData.GetConstPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
                 {
                     continue;
                 }

@@ -1,9 +1,10 @@
 ﻿@page "/"
-
+@using MusicClub.v3.Cms.Controllers
 
 @attribute [Authorize(Policy = "ValidTokenOnly")]
 
 @inject IActService ActApiService;
+@inject DataController DataController;
 
 <PageTitle>Home</PageTitle>
 
@@ -27,9 +28,9 @@
 @code {
     private PagedServiceResult<IList<ActDataResponse>, ActFilterResponse>? pagedServiceResult;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()    
     {
-        pagedServiceResult = await ActApiService.GetAll(new PaginationRequest { Page = 1, PageSize = 12 }, new ActFilterRequest { });
+        pagedServiceResult = (PagedServiceResult<IList<ActDataResponse>, ActFilterResponse>?)DataController.Data;
 
         await base.OnInitializedAsync();
     }

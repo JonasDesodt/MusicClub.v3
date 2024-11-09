@@ -1,16 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using MusicClub.v3.Cms.Controllers
+@using MusicClub.v3.Cms.Services
 @using MusicClub.v3.Abstractions
 
 @inherits LayoutComponentBase
 
 @inject ITokenStore TokenStore
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject MemoryService MemoryService
+@inject DataController DataController;
+@inject NavigationManager NavigationManager
+
+@if (isLoading)
+{
+    <Spinner />
+}
 
 <div class="@(isMenuOpen ? "menu" : "")">
     <header>
         <div>
             <h1>
-                <a href="">
+                <a href="/">
                     <img src="favicon.png" alt="Blazor favicon" />
 
                     <span>Music Club CMS</span>
@@ -58,7 +68,10 @@
     </header>
 
     <main>
-        @Body
+        @if (isInitCompleted is true)
+        {
+            @Body
+        }
     </main>
 </div>
 
@@ -66,9 +79,82 @@
 @code {
     private bool isMenuOpen = false;
 
+    private bool isLoading;
+
+    private bool? isInitCompleted = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // await JsFunctions.AddHandleOnScroll();
+
+        NavigationManager.RegisterLocationChangingHandler(async args =>
+        {
+            await DataController.CancelCurrentFetch();
+
+            // if (MemoryService.HasUnsavedData)
+            // {
+            //     MemoryService.NavigationRequest = args.TargetLocation;
+
+            //     args.PreventNavigation();
+
+            //     MemoryService.RequestConfirmation();
+
+            //     //isPreviousNavigationLinkButtonClicked = isNextNavigationLinkButtonClicked = false;
+
+            //     return;
+            // }
+
+            if (!await DataController.HandleLocationChanged(args.TargetLocation))
+            {
+                await DataController.CancelCurrentFetch();
+
+                args.PreventNavigation();
+
+                //hasFetchError = true;
+                StateHasChanged();
+
+                //isPreviousNavigationLinkButtonClicked = isNextNavigationLinkButtonClicked = false;
+
+                return; //this return needs more testing
+            }
+
+            //UpdateNavigationHistory(args.TargetLocation);
+
+            isMenuOpen = false;
+        });
+
+        DataController.OnFetchStateChanged += FetchStateChanged;
+
+        // MemoryService.OnConfirmationRequested += (sender, args) => { isOpen = true; StateHasChanged(); };
+
+        if ((await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated is true)
+        {
+            if (await DataController.HandleLocationChanged(NavigationManager.Uri))
+            {
+                // navigationHistory.Add(NavigationManager.Uri);
+                // navigationHistoryIndex++;
+
+                isInitCompleted = true;
+            }
+        } else
+        {
+            isInitCompleted = true;
+        }  
+
+        base.OnInitialized();
+    }
+
+    private void FetchStateChanged(object? sender, bool state)
+    {
+        isLoading = state;
+        StateHasChanged();
+    }
+
     private async void Logout()
     {
         await TokenStore.RemoveToken();
+
+        NavigationManager.NavigateTo("/login");
 
         await AuthenticationStateProvider.GetAuthenticationStateAsync();
 

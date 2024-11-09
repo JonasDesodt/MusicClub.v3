@@ -181,5 +181,40 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
                 }
             }
         }
+
+        public static IEnumerable<IMethodSymbol> GetMethodSymbols(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+        {
+            var semanticModel = context.Compilation.GetSemanticModel(interfaceDeclarationSyntax.SyntaxTree);
+
+            foreach (var member in interfaceDeclarationSyntax.Members)
+            {
+                // Get the symbol for each member
+                var memberSymbol = semanticModel.GetDeclaredSymbol(member);
+
+                if (memberSymbol is IMethodSymbol methodSymbol)
+                {
+                    yield return methodSymbol;
+                }
+            }
+        }
+
+        public static IEnumerable<(IMethodSymbol, IList<AttributeData>)> GetMethodSymbolsAndTheirAnnotations(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+        {
+            var compilation = context.Compilation;
+
+            var semanticModel = compilation.GetSemanticModel(interfaceDeclarationSyntax.SyntaxTree);
+
+            foreach (var member in interfaceDeclarationSyntax.Members)
+            {
+                // Get the symbol for each member
+                var memberSymbol = semanticModel.GetDeclaredSymbol(member);
+                
+                if (memberSymbol is IMethodSymbol methodSymbol)
+                {
+                    yield return (methodSymbol, methodSymbol.GetAttributes());
+
+                }
+            }
+        }
     }
 }

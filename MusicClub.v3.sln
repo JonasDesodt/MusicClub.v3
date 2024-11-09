@@ -41,7 +41,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.Cms", "MusicCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.ApiServices", "MusicClub.v3.ApiServices\MusicClub.v3.ApiServices.csproj", "{5465CDC5-60D9-4E49-9AB1-4262B955DB01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.ApiServices", "MusicClub.v3.SourceGenerators.ApiServices\MusicClub.v3.SourceGenerators.ApiServices.csproj", "{E0619E89-77E5-47ED-B05B-802B72645695}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicClub.v3.SourceGenerators.ApiServices", "MusicClub.v3.SourceGenerators.ApiServices\MusicClub.v3.SourceGenerators.ApiServices.csproj", "{E0619E89-77E5-47ED-B05B-802B72645695}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicClub.v3.SourceGenerators.Cms", "MusicClub.v3.SourceGenerators.Cms\MusicClub.v3.SourceGenerators.Cms.csproj", "{8CE4634A-8440-4701-A207-E6E0457F9ED8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +111,10 @@ Global
 		{E0619E89-77E5-47ED-B05B-802B72645695}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0619E89-77E5-47ED-B05B-802B72645695}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0619E89-77E5-47ED-B05B-802B72645695}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE4634A-8440-4701-A207-E6E0457F9ED8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE4634A-8440-4701-A207-E6E0457F9ED8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE4634A-8440-4701-A207-E6E0457F9ED8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE4634A-8440-4701-A207-E6E0457F9ED8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +135,7 @@ Global
 		{C98571E9-7353-48BC-8138-AE7DF0437CCA} = {3ADFB910-DB10-4FA5-A18E-5C33DF7C2210}
 		{5465CDC5-60D9-4E49-9AB1-4262B955DB01} = {FE93ED3E-CE19-43A7-A7A9-0A19659FDFEF}
 		{E0619E89-77E5-47ED-B05B-802B72645695} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
+		{8CE4634A-8440-4701-A207-E6E0457F9ED8} = {16F9D407-A4E1-4ACB-B25D-2C30F13BB320}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28C5E559-5FFF-4ECF-A9D0-2FE3955A2E8F}

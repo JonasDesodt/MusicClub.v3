@@ -7,6 +7,7 @@ using MusicClub.v3.Abstractions;
 using MusicClub.v3.Abstractions.Services;
 using MusicClub.v3.ApiServices;
 using MusicClub.v3.Cms;
+using MusicClub.v3.Cms.Controllers;
 using MusicClub.v3.Cms.Handlers;
 using MusicClub.v3.Cms.Providers;
 using MusicClub.v3.Cms.Requirements;
@@ -43,6 +44,9 @@ builder.Services.AddScoped<IAuthorizationHandler, ValidTokenHandler>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddScoped<DataController>();
+builder.Services.AddScoped<MemoryService>();
 
 builder.Services.AddScoped<IActService, ActApiService>();
 

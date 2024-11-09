@@ -26,29 +26,29 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
             foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateFilterResponse"))
             {
-                if (!(attributeData.GetPropertyValue("ClassNamePattern") is string classNamePattern))
+                if (!(attributeData.GetConstPropertyValue("ClassNamePattern") is string classNamePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("ClassNameReplacement") is string classNameReplacement))
-                {
-                    continue;
-                }
-
-                if (!(attributeData.GetPropertyValue("NamespacePattern") is string namespacePattern))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                if (!(attributeData.GetConstPropertyValue("ClassNameReplacement") is string classNameReplacement))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("ForeignKeyPattern") is string foreignKeyPattern))
+                if (!(attributeData.GetConstPropertyValue("NamespacePattern") is string namespacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                {
+                    continue;
+                }
+
+                if (!(attributeData.GetConstPropertyValue("ForeignKeyPattern") is string foreignKeyPattern))
+                {
+                    continue;
+                }
+                if (!(attributeData.GetConstPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
                 {
                     continue;
                 }

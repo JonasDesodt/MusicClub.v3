@@ -25,12 +25,12 @@ namespace MusicClub.v3.SourceGenerators.Dto
 
             foreach (var (requestClassDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateFilterRequestExtensions"))
             {
-                if (!(attributeData.GetPropertyValue("ValidationPattern") is string validationPattern))
+                if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetPropertyValue("ClassNameSuffix") is string classNameSuffix))
+                if (!(attributeData.GetConstPropertyValue("ClassNameSuffix") is string classNameSuffix))
                 {
                     continue;
                 }
@@ -38,11 +38,11 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 var @type = context.GetClassName(requestClassDeclarationSyntax);
                 var @class = @type + classNameSuffix;
 
-                if (!(attributeData.GetPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("NamespaceReplacement") is string namespaceReplacement))
+                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
                 {
                     continue;
                 }
@@ -51,7 +51,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 {
                     continue;
                 }
-                if (!(attributeData.GetPropertyValue("Request") is string request))
+                if (!(attributeData.GetConstPropertyValue("Request") is string request))
                 {
                     continue;
                 }

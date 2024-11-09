@@ -17,7 +17,7 @@ namespace MusicClubManager.Blazor.Handlers
         {
             if (request.RequestUri?.AbsoluteUri.Equals("https://localhost:7023/private/auth/token") is false && (await authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity?.IsAuthenticated is false)
             {
-                navigationManager.NavigateTo($"/sign-in?returnUrl={navigationManager.ToBaseRelativePath(navigationManager.Uri)}");
+                navigationManager.NavigateTo($"/login?returnUrl={navigationManager.ToBaseRelativePath(navigationManager.Uri)}");
 
                 return new HttpResponseMessage(HttpStatusCode.Unauthorized);
             }

@@ -27,7 +27,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
             foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateFilterRequest"))
             {
                 //VALIDATE THE CLASS
-                if (!(attributeData.GetPropertyValue("ValidationPattern") is string validationPattern))
+                if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
                 {
                     continue;
                 }

@@ -24,11 +24,24 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             }
         }
 
-        public static string GetPropertyValue(this AttributeData attributeData, string name)
+        public static string GetConstPropertyValue(this AttributeData attributeData, string name)
         {
             foreach (var namedArg in attributeData.AttributeClass.GetMembers().OfType<IFieldSymbol>())
             {
                 if (namedArg.IsConst && namedArg.Type.SpecialType == SpecialType.System_String && namedArg.Name == name)
+                {
+                    return namedArg.ConstantValue as string;
+                }
+            }
+
+            return null;
+        }
+
+        public static string GetPropertyValue(this AttributeData attributeData, string name)
+        {
+            foreach (var namedArg in attributeData.AttributeClass.GetMembers().OfType<IFieldSymbol>())
+            {
+                if (namedArg.Type.SpecialType == SpecialType.System_String && namedArg.Name == name)
                 {
                     return namedArg.ConstantValue as string;
                 }
