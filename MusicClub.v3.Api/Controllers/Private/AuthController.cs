@@ -48,7 +48,7 @@ namespace MusicClub.v3.Api.Controllers.Private
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? throw new NullReferenceException("The IdentityUser has no username.")),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Name, person.Firstname)
+                new Claim(ClaimTypes.Name, person.Firstname) // todo => use ClaimTypes.GivenName?
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"] ?? throw new InvalidOperationException("JWT Secret is missing in configuration.")));

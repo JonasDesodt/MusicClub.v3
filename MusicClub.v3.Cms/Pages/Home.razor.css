@@ -1,0 +1,53 @@
+﻿
+h2 {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 0 var(--layout-padding-left-right);
+}
+
+h2 > ::deep img {
+    border-radius: 50%;
+}
+    
+    section {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em var(--layout-padding-left-right);
+}
+
+    section:nth-of-type(odd) {
+        background-color: rgb(240,240,240);
+    }
+
+    section:nth-of-type(even) {
+        background-color: rgb(240,240,240);
+    }
+
+        section > a {
+            align-self: flex-end;
+        }
+
+section > ul {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+}
+
+    section > ul > li {
+        border-bottom: var(--divider);
+        padding: 1em 0;
+    }
+
+        section > ul > li > a {
+            display: flex;
+            flex-direction: column;
+            gap: .5em;
+            text-decoration: none;
+        }
+
+            section > ul > li > a > span {
+                font-weight: bold;
+            }

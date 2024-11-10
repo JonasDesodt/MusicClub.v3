@@ -1,13 +1,13 @@
 ﻿.spinner {
-    align-self: center;
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    width: 36px;
-    height: 36px;
+    border: 12px solid rgba(0, 0, 0, 0.15);
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border-left-color: #09f;
     animation: delay .5s, spin 1s ease infinite;
     position: fixed;
-    margin-top: calc(100vh / 3);
+    left: calc((100vw / 2) - 22px); /*positioning to the center with transformX(-50%) does not seem to work  */
+    top: calc(100vh / 3);
     z-index: 9;
 }
 

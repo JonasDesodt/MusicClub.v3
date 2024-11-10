@@ -11,6 +11,8 @@ namespace MusicClub.v3.Dto.Filter.Request
     [GenerateFilterRequestExtensions(typeof(IPerson))]
     public partial class PersonFilterRequest 
     {
+        public string? EmailAddress { get; set; }
+
         public string? SortProperty { get; set; }
 
         //[DefaultValue(SortDirection.Ascending)]

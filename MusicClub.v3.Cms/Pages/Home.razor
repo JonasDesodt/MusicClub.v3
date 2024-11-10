@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using MusicClub.v3.Cms.Controllers
+@using MusicClub.v3.Cms.Models.ViewModels
 
 @attribute [Authorize(Policy = "ValidTokenOnly")]
 
@@ -8,35 +9,78 @@
 
 <PageTitle>Home</PageTitle>
 
-<h2>Home</h2>
-
-@if(pagedServiceResult is not null)
-{
-    <PagedList OnPageChanged="(model) => HandleOnPageChanged(model)"
-               PagedServiceResult="pagedServiceResult" Context="DataResult">
-        <ItemTemplate>
-            <ul>
-                <li>@DataResult.DataResult.Name</li>
-            </ul>
-        </ItemTemplate>
-    </PagedList>
-}
 
 
+<h2>
+    <Image ImageDataResponse="homeViewModel?.PersonDataResponse.ImageDataResponse" />
 
+    <span>Welcome,
+        <AuthorizeView>
+            <Authorized> @context.User.Identity?.Name</Authorized>
+            <NotAuthorized> Stranger</NotAuthorized>
+        </AuthorizeView>
+    </span>
+</h2>
 
-@code {
-    private PagedServiceResult<IList<ActDataResponse>, ActFilterResponse>? pagedServiceResult;
+<section>
+    <h3>Upcoming acts</h3>
 
-    protected override async Task OnInitializedAsync()    
+    @if (homeViewModel?.UpcomingActDataResponses is { Count: > 0 } upcomingActDataResponses)
     {
-        pagedServiceResult = (PagedServiceResult<IList<ActDataResponse>, ActFilterResponse>?)DataController.Data;
+        <ul>
+            @foreach (var actDataResponse in upcomingActDataResponses)
+            {
+                <li>
+                    <a href="">
+                        @(actDataResponse.Start?.ToLocalTime() ?? actDataResponse.LineupDataResponse.Doors.ToLocalTime())
 
-        await base.OnInitializedAsync();
+                        <span>@actDataResponse.Name</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>There are no acts planned.</p>
     }
 
-    private async Task HandleOnPageChanged(PaginationRequest paginationRequest)
+    <a href="" class="button">Show all</a>
+</section>
+
+<section>
+    <h3>Acts you last worked on</h3>
+
+    @if (homeViewModel?.UpdatedActDataResponses is { Count: > 0 } updatedActDataResponses)
     {
-        pagedServiceResult = await ActApiService.GetAll(paginationRequest, new ActFilterRequest { });
+        <ul>
+            @foreach (var actDataResponse in updatedActDataResponses)
+            {
+                <li>
+                    <a href="">
+                        @actDataResponse.Updated.ToLocalTime()
+
+                        <span>@actDataResponse.Name</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>You have not done any work yet.</p>
+    }
+
+    <a href="" class="button">Show all</a>
+</section>
+
+@code {
+    private HomeViewModel? homeViewModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        homeViewModel = (HomeViewModel?)DataController.Data;
+
+        await base.OnInitializedAsync();
     }
 }

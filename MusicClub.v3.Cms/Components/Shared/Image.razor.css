@@ -1,0 +1,13 @@
+﻿img, span {
+    /*    aspect-ratio: 3/2;*/
+    aspect-ratio: 1/1;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+span {
+    align-items: center;
+    background: rgb(240,240,240);
+    display: flex;
+    justify-content: center;
+}

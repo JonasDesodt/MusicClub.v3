@@ -58,7 +58,8 @@ main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: var(--layout-padding-bottom-top-main) var(--layout-padding-left-right);
+    gap: 4em;
+    padding: var(--layout-padding-bottom-top-main) 0;
 }
 
 main > ::deep form { /* positions the login form in the middle of main */

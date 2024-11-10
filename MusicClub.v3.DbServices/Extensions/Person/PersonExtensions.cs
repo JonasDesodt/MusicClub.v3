@@ -62,6 +62,11 @@ namespace MusicClub.v3.DbServices.Extensions.Person
 
         public static IQueryable<DbCore.Models.Person> Filter(this IQueryable<DbCore.Models.Person> people, PersonFilterRequest filterRequest)
         {
+            if (!string.IsNullOrWhiteSpace(filterRequest.EmailAddress))
+            {
+                people = people.Where(p => p.ApplicationUsers.SingleOrDefault(a => a.Email != null && a.Email.ToLower() == filterRequest.EmailAddress.ToLower()) != null);
+            }
+
             if (!string.IsNullOrWhiteSpace(filterRequest.Firstname))
             {
                 people = people.Where(a => a.Firstname != null && a.Firstname.ToLower().Contains(filterRequest.Firstname.ToLower()));
