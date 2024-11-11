@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MusicClub.v3.Cms.Models.ViewModels;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using MusicClub.v3.ApiServices;
+using MusicClub.v3.Dto.Statistics.Requests;
 
 namespace MusicClub.v3.Cms.Controllers
 {
     [GenerateDataController]
-    public partial class DataController(NavigationManager navigationManager, MemoryService memoryService, AuthenticationStateProvider authenticationStateProvider, IActService actApiService, IPersonService personApiService)/*, IArtistService artistApiService, IPersonService personApiService, IPerformanceService performanceApiService, IImageApiService imageApiService, ILineupService lineupApiService)*/ : DataControllerBase(navigationManager, memoryService, authenticationStateProvider)
+    public partial class DataController(NavigationManager navigationManager, MemoryService memoryService, AuthenticationStateProvider authenticationStateProvider, IActService actApiService, IPersonService personApiService, StatisticsApiService statisticsApiService)/*, IArtistService artistApiService, IPersonService personApiService, IPerformanceService performanceApiService, IImageApiService imageApiService, ILineupService lineupApiService)*/ : DataControllerBase(navigationManager, memoryService, authenticationStateProvider)
     {
         [PreFetch("Act")]
         [SuppressMessage("Style", "IDE0052:Remove unread private member", Justification = "Used by generated code")]
@@ -64,16 +66,19 @@ namespace MusicClub.v3.Cms.Controllers
                 var upcomingActsPagedServiceResult = await Fetch(async () => await _actApiService.GetAll(new PaginationRequest { Page = 1, PageSize = 5 }, new ActFilterRequest { SortProperty = "Start", SortDirection = Dto.Enums.SortDirection.Ascending }));
                 var updatedActsPagedServiceResult = await Fetch(async () => await _actApiService.GetAll(new PaginationRequest { Page = 1, PageSize = 5 }, new ActFilterRequest { SortProperty = "Start", SortDirection = Dto.Enums.SortDirection.Ascending }));
                 var personServiceResult = await Fetch(async () => await personApiService.GetAll(new PaginationRequest { Page = 1, PageSize = 1 }, new PersonFilterRequest { EmailAddress = emailAddress}));
+                var attendancePerMonthServiceResult = await Fetch(async () => await statisticsApiService.GetAttendancePerMonth(new AttendancePerMonthStatisticsRequest { From = DateTime.UtcNow.AddMonths(-12), Until = DateTime.UtcNow }));
                
                 if (upcomingActsPagedServiceResult is { Data: not null, Data.Count: > 0 } upcomingActs
                     && updatedActsPagedServiceResult is { Data: not null, Data.Count: > 0 } updatedActs
-                    && personServiceResult is { Data: not null, Data.Count: 1 } person)
+                    && personServiceResult is { Data: not null, Data.Count: 1 } person
+                    && attendancePerMonthServiceResult is { Data: not null } attendancePerMonth)
                 {
                     Data = new HomeViewModel
                     {
                         PersonDataResponse = person.Data.First(),
                         UpcomingActDataResponses = upcomingActs.Data,
-                        UpdatedActDataResponses = updatedActs.Data
+                        UpdatedActDataResponses = updatedActs.Data,
+                        AttendancePerMonthStatisticsResponse = attendancePerMonth.Data
                     };
 
                     return true;

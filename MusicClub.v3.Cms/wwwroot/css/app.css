@@ -126,6 +126,7 @@ code {
     --primary-foreground-active-color: rgb(0,75,0);
     --primary-foreground-hover-color: rgb(0,100,0);
     --responsive-flex-direction: column;
+    --responsive-flex-direction-breakpoint-1: column;
     --responsive-flex-display: flex;
     --responsive-flex-display-reverse: none;
     --img-width-fixed: 100%;
@@ -228,3 +229,10 @@ div#app {
         flex-direction: column;
         flex-grow: 1;
     }
+
+
+@media screen and ( min-width : 320px ) {
+    :root {
+        --responsive-flex-direction-breakpoint-1: row;
+    }
+}

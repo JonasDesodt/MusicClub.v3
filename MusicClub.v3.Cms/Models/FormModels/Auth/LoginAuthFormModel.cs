@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace MusicClub.v3.Cms.FormModels.Auth
+namespace MusicClub.v3.Cms.Models.FormModels.Auth
 {
     public class LoginAuthFormModel
     {

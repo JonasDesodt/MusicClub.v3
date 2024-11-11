@@ -1,20 +1,22 @@
 ﻿@page "/"
 @using MusicClub.v3.Cms.Controllers
+@using MusicClub.v3.Cms.Models.Plotly
 @using MusicClub.v3.Cms.Models.ViewModels
+@using System.Globalization
 
 @attribute [Authorize(Policy = "ValidTokenOnly")]
 
 @inject IActService ActApiService;
 @inject DataController DataController;
+@inject IJSRuntime JsRuntime;
 
 <PageTitle>Home</PageTitle>
-
-
 
 <h2>
     <Image ImageDataResponse="homeViewModel?.PersonDataResponse.ImageDataResponse" />
 
-    <span>Welcome,
+    <span>
+        Welcome,
         <AuthorizeView>
             <Authorized> @context.User.Identity?.Name</Authorized>
             <NotAuthorized> Stranger</NotAuthorized>
@@ -74,6 +76,12 @@
     <a href="" class="button">Show all</a>
 </section>
 
+<section>
+    <h3>Statistics</h3>
+
+    <div id="attendance_per_month" style="width:100%;max-width:700px"></div>
+</section>
+
 @code {
     private HomeViewModel? homeViewModel;
 
@@ -81,6 +89,30 @@
     {
         homeViewModel = (HomeViewModel?)DataController.Data;
 
+        if (homeViewModel is null)
+        {
+            return;
+        }
+
         await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && homeViewModel is not null)
+        {
+            var attendancePerMonthStatisticsResponse = homeViewModel.AttendancePerMonthStatisticsResponse;
+
+            var data = new LineGraphData
+                {
+                    X = attendancePerMonthStatisticsResponse.Statistics.Select(x => new DateTimeFormatInfo().GetMonthName(x.Key + 1)).ToList(),
+                    Y = attendancePerMonthStatisticsResponse.Statistics.Select(y => y.Value).ToList(),
+                    Mode = "lines"
+                };
+
+            await JsRuntime.InvokeVoidAsync("Plotly.newPlot", "attendance_per_month", new[] { data }, new Layout { Title = "Attendance per month" });
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 }

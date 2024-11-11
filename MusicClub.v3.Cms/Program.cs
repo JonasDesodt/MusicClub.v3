@@ -51,6 +51,8 @@ builder.Services.AddScoped<MemoryService>();
 builder.Services.AddScoped<IActService, ActApiService>();
 builder.Services.AddScoped<IPersonService, PersonApiService>();
 
+builder.Services.AddScoped<StatisticsApiService>();
+
 builder.Services.AddScoped<IFilterRequestHelpers<ActFilterRequest, ActFilterResponse>, ActFilterRequestHelpers>();
 builder.Services.AddScoped<IFilterRequestHelpers<PersonFilterRequest, PersonFilterResponse>, PersonFilterRequestHelpers>();
 

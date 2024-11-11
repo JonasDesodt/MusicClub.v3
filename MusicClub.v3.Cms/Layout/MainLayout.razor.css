@@ -16,8 +16,9 @@ header {
 
     header > div {
         display: flex;
-        flex-direction: column;
+        flex-direction: var(--responsive-flex-direction-breakpoint-1);
         gap: 1em;
+        justify-content: space-between;
     }
 
         header > div > h1 > a {
@@ -33,6 +34,7 @@ header {
             background-color: transparent;
             border: none;
             font-weight: bold;
+            padding: 0;
         }
 
     header > nav {
