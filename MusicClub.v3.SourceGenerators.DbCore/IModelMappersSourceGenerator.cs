@@ -23,38 +23,35 @@ namespace MusicClub.v3.SourceGenerators.DbCore
             {
                 return;
             }
-            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateIModelMappers"))
-            {
-                var modelType = context.GetClassName(classDeclarationSyntax);
 
-                //if (!(attributeData.GetPropertyValue("DataRequestClassNameSuffix") is string dataRequestTypeSuffix))
-                //{
-                //    continue;
-                //}
-                if (!(attributeData.GetConstPropertyValue("InterfacePrefix") is string interfacePrefix))
+            foreach (var (classDeclarationSyntax, symbol, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context, "GenerateIModelMappers"))
+            {
+                var modelType = symbol.GetClassName();
+
+                var constants = attributeData.GetConstants(new string[]
                 {
-                    continue;
-                }
+                    "InterfacePrefix",
+                    "NamespaceReplacePattern",
+                    "NamespaceReplacement",
+                    "Created",
+                    "Updated",
+                    "TenantId"
+                });
+
+                var interfacePrefix = constants["InterfacePrefix"];
 
                 var interfaceType = interfacePrefix + modelType;
 
-                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
+                var namespaceReplacePattern = constants["NamespaceReplacePattern"];
+
+                var namespaceReplacement = constants["NamespaceReplacement"];
+
+                if (!new Regex(namespaceReplacePattern).TryReplace(symbol.GetNamespace(), namespaceReplacement, out string @namespace))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
-                {
-                    continue;
-                }
-
-                if (!new Regex(namespaceReplacePattern).TryReplace(context.GetNamespace(classDeclarationSyntax), namespaceReplacement, out string @namespace))
-                {
-                    continue;
-                }
-
-                //var properties = context.GetPropertySymbolNames(classDeclarationSyntax);
-               var properties = context.GetInterfaceProperties(classDeclarationSyntax).Select(x => x.Name);
+                var properties = symbol.GetInterfaceProperties().Select(x => x.Name);
 
                 if (!(attributeData.GetParamStringArrayValues() is IEnumerable<string> additionalProperties))
                 {
@@ -63,20 +60,11 @@ namespace MusicClub.v3.SourceGenerators.DbCore
 
                 var classname = interfaceType + "Extensions"; //get extension from the attribute?
 
-                if (!(attributeData.GetConstPropertyValue("Created") is string created))
-                {
-                    continue;
-                }
+                var created = constants["Created"];
 
-                if (!(attributeData.GetConstPropertyValue("Updated") is string updated))
-                {
-                    continue;
-                }
+                var updated = constants["Updated"];
 
-                if (!(attributeData.GetConstPropertyValue("TenantId") is string tenantId))
-                {
-                    continue;
-                }
+                var tenantId = constants["TenantId"];
 
                 var source = ClassStrings.GetIModelToModelString(@namespace, classname, modelType, properties, additionalProperties, interfaceType, created, updated, tenantId);
 

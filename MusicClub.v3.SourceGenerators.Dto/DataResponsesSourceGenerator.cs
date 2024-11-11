@@ -22,42 +22,38 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 return;
             }
 
-            foreach (var (classDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateDataResponse"))
+            foreach (var (classDeclarationSyntax, symbol, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context, "GenerateDataResponse"))
             {
-                if (!(attributeData.GetConstPropertyValue("ClassNamePattern") is string classNamePattern))
+                var constants = attributeData.GetConstants(new string[]
                 {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("ClassNameReplacement") is string classNameReplacement))
-                {
-                    continue;
-                }
+                    "ClassNamePattern",
+                    "ClassNameReplacement",
+                    "NamespacePattern",
+                    "NamespaceReplacement",
+                    "ForeignKeyPattern",
+                    "ForeignKeyReplacement"
+                });
 
-                if (!(attributeData.GetConstPropertyValue("NamespacePattern") is string namespacePattern))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
-                {
-                    continue;
-                }
+                var classNamePattern = constants["ClassNamePattern"];
 
-                if (!(attributeData.GetConstPropertyValue("ForeignKeyPattern") is string foreignKeyPattern))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("ForeignKeyReplacement") is string foreignKeyReplacement))
-                {
-                    continue;
-                }
+                var classNameReplacement = constants["ClassNameReplacement"];
+
+                var namespacePattern = constants["NamespacePattern"];
+
+                var namespaceReplacement = constants["NamespaceReplacement"];
+
+                var foreignKeyPattern = constants["ForeignKeyPattern"];
+
+                var foreignKeyReplacement = constants["ForeignKeyReplacement"];
+
 
                 //todo => add check on request class name if a match is found with the classNamePattern?
                 //[GenerateDataResponse] w/ wrong pattern on ArtistFilterRequest gives a results, should not happen
 
-                var className = Regex.Replace(context.GetClassName(classDeclarationSyntax), classNamePattern, classNameReplacement);
-                var @namespace = Regex.Replace(context.GetNamespace(classDeclarationSyntax), namespacePattern, namespaceReplacement);
-                //var properties = context.GetPropertySymbols(classDeclarationSyntax);
-                var properties = context.GetInterfaceProperties(classDeclarationSyntax);
+                var className = Regex.Replace(symbol.GetClassName(), classNamePattern, classNameReplacement);
+                var @namespace = Regex.Replace(symbol.GetNamespace(), namespacePattern, namespaceReplacement);
+               
+                var properties = symbol.GetInterfaceProperties();
 
                 context.AddSource(className + NamingConventions.FileExtension, ClassStrings.GetResponseString(@namespace, className, properties.GetDataResponsePropertyStrings(foreignKeyPattern, foreignKeyReplacement)));
             }

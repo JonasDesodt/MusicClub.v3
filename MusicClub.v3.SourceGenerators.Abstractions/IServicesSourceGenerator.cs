@@ -22,12 +22,13 @@ namespace MusicClub.v3.SourceGenerators.Abstractions
                 return;
             }
 
-            foreach (var (interfaceDeclarationSyntax, models) in receiver.GetModels(context.Compilation, Constants.GenerateIServicesAttributeName))
+            foreach (var (interfaceDeclarationSyntax, symbol, models) in receiver.GetModels(context, Constants.GenerateIServicesAttributeName))
             {
                 foreach (var model in models)
                 {
-                    var @namespace = context.GetNamespace(interfaceDeclarationSyntax);
-                    var baseInterface = context.GetInterfaceName(interfaceDeclarationSyntax);
+                    var @namespace = symbol.GetNamespace();
+                    var baseInterface = symbol.GetInterfaceName();
+
                     var baseInterfceTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(interfaceDeclarationSyntax), NamingConventions.GetDtoSuffixes());
 
                     context.AddSource($"I{model}Service{NamingConventions.FileExtension}", InterfaceStrings.GetIServiceString(@namespace, model, baseInterface, baseInterfceTypeParams));

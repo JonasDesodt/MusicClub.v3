@@ -22,15 +22,15 @@ namespace MusicClub.v3.SourceGenerators.Api
                 return;
             }
 
-            foreach (var (classDeclarationSyntax, models) in receiver.GetModels(context.Compilation, Constants.GenerateControllersAttributeName))
+            foreach (var (classDeclarationSyntax, symbol, models) in receiver.GetModels(context, Constants.GenerateControllersAttributeName))
             {
                 foreach (var model in models)
                 {
-                    var @namespace = context.GetNamespace(classDeclarationSyntax);
-                    var baseClass = context.GetClassName(classDeclarationSyntax);
+                    var @namespace = symbol.GetNamespace();
+                    var baseClass = symbol.GetClassName();
                     var constructorParams = classDeclarationSyntax.GetSingleConstructorParameters();
                     var baseClassTypeParams = StringFormattingHelpers.ReplaceWithModelBeforeNamingConvention(model, context.GetTypeParameterNames(classDeclarationSyntax), NamingConventions.GetDtoSuffixes());
-                    
+
                     context.AddSource($"{model}Controller{NamingConventions.FileExtension}", ClassStrings.GetControllerString(@namespace, model, constructorParams, baseClass, baseClassTypeParams));
                 }
             }

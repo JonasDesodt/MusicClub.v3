@@ -25,7 +25,7 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 return;
             }
 
-            foreach (var (requestClassDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateIModelImplementation"))
+            foreach (var (requestClassDeclarationSyntax, requestClassSymbol, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context, "GenerateIModelImplementation"))
             {
                 //VALIDATE THE CLASS
                 if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
@@ -33,16 +33,16 @@ namespace MusicClub.v3.SourceGenerators.Dto
                     continue;
                 }
 
-                var @class = context.GetClassName(requestClassDeclarationSyntax);
+                var @class = requestClassSymbol.GetClassName();
 
                 if (!Regex.IsMatch(@class, validationPattern))
                 {
                     continue;
                 }
 
-                var properties = context.GetInterfaceProperties(requestClassDeclarationSyntax);
+                var properties = requestClassSymbol.GetInterfaceProperties();
 
-                var @namespace = context.GetNamespace(requestClassDeclarationSyntax);
+                var @namespace = requestClassSymbol.GetNamespace();
 
                 context.AddSource(@class + NamingConventions.FileExtension, ClassStrings.GetIModelImplementationString(@namespace, @class, properties));
             }

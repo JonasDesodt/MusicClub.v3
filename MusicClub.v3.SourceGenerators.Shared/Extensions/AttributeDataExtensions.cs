@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 {
@@ -76,5 +77,20 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 
         //    // return new string[] { };
         //}
+
+        public static IDictionary<string ,string> GetConstants(this AttributeData attributeData, string[] names)
+        {
+            var dictionary = new Dictionary<string ,string>();
+
+            foreach (var namedArg in attributeData.AttributeClass.GetMembers().OfType<IFieldSymbol>())
+            {
+                if (namedArg.IsConst && namedArg.Type.SpecialType == SpecialType.System_String && names.Contains(namedArg.Name))
+                {
+                    dictionary.Add(namedArg.Name, namedArg.ConstantValue as string);
+                }
+            }
+
+            return dictionary;
+        }
     }
 }

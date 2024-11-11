@@ -21,61 +21,49 @@ namespace MusicClub.v3.SourceGenerators.Dto
                 return;
             }
 
-            foreach (var (requestClassDeclarationSyntax, attributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context.Compilation, "GenerateDataMappers"))
+            foreach (var (requestClassDeclarationSyntax, requestClassSymbol, requestClassAttributeData) in receiver.GetClassDeclarationSyntaxWithAttributeData(context, "GenerateDataMappers"))
             {
-                if (!(attributeData.GetConstPropertyValue("ValidationPattern") is string validationPattern))
+                var constants = requestClassAttributeData.GetConstants(new string[]
                 {
-                    continue;
-                }
+                    "ValidationPattern",
+                    "ClassNameReplacePattern",
+                    "ClassNameReplacement",
+                    "ClassNameSuffix",
+                    "NamespaceReplacePattern",
+                    "NamespaceReplacement",
+                    "Request",
+                    "Response"
+                });
 
-                var dataRequestClassName = context.GetClassName(requestClassDeclarationSyntax);
+                var validationPattern = constants["ValidationPattern"];
+
+                var dataRequestClassName = requestClassSymbol.GetClassName();
 
                 if (!Regex.IsMatch(dataRequestClassName, validationPattern))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetConstPropertyValue("ClassNameReplacePattern") is string classNameReplacePattern))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("ClassNameReplacement") is string classNameReplacement))
-                {
-                    continue;
-                }
+                var classNameReplacePattern = constants["ClassNameReplacePattern"];
+                var classNameReplacement = constants["ClassNameReplacement"];
 
                 var dataResponseClassname = Regex.Replace(dataRequestClassName, classNameReplacePattern, classNameReplacement);
 
-                if (!(attributeData.GetConstPropertyValue("ClassNameSuffix") is string classNameSuffix))
-                {
-                    continue;
-                }
-
+                var classNameSuffix = constants["ClassNameSuffix"];
+                
                 var dataRequestExtensionsClassname = dataRequestClassName + classNameSuffix;
                 var dataResponseExtensionsClassName =  dataResponseClassname + classNameSuffix;
 
-                if (!(attributeData.GetConstPropertyValue("NamespaceReplacePattern") is string namespaceReplacePattern))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("NamespaceReplacement") is string namespaceReplacement))
-                {
-                    continue;
-                }
-
+                var namespaceReplacePattern = constants["NamespaceReplacePattern"];
+                var namespaceReplacement = constants["NamespaceReplacement"];
+ 
                 if (!new Regex(namespaceReplacePattern).TryReplace(context.GetNamespace(requestClassDeclarationSyntax), namespaceReplacement, out string baseNamespace))
                 {
                     continue;
                 }
 
-                if (!(attributeData.GetConstPropertyValue("Request") is string request))
-                {
-                    continue;
-                }
-                if (!(attributeData.GetConstPropertyValue("Response") is string response))
-                {
-                    continue;
-                }
+                var request = constants["Request"];
+                var response = constants["Response"];
 
                 var dataRequestExtensionsNamespace = baseNamespace + "." + request;
                 var dataResponseExtensionsNamespace = baseNamespace + "." + response;

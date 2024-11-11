@@ -20,13 +20,21 @@ namespace MusicClub.SourceGenerators.ApiServices
                 return;
             }
 
-            foreach (var (classDeclaration, models) in receiver.GetModels(context.Compilation, "GenerateApiServices"))
+            foreach (var (classDeclaration, symbol, models) in receiver.GetModels(context, "GenerateApiServices"))
             {
                 foreach (var model in models)
                 {
-                    context.AddSource($"{model}ApiService.g.cs", GetApiServiceClass(context.GetNamespace(classDeclaration), model, classDeclaration.Identifier.Text));
+                    context.AddSource($"{model}ApiService.g.cs", GetApiServiceClass(symbol.GetNamespace(), model, classDeclaration.Identifier.Text));
                 }
             }
+
+            //foreach (var (classDeclaration, models) in receiver.GetModels(context.Compilation, "GenerateApiServices"))
+            //{
+            //    foreach (var model in models)
+            //    {
+            //        context.AddSource($"{model}ApiService.g.cs", GetApiServiceClass(context.GetNamespace(classDeclaration), model, classDeclaration.Identifier.Text));
+            //    }
+            //}
         }   
 
         private string GetApiServiceClass(string containingNamespace, string model, string baseClassName)

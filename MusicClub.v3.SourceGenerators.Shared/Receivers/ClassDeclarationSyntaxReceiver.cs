@@ -17,6 +17,28 @@ namespace MusicClub.v3.SourceGenerators.Shared.Receivers
             }
         }
 
+        public IEnumerable<(ClassDeclarationSyntax, ISymbol, IEnumerable<string>)> GetModels(GeneratorExecutionContext context, string attributeName)
+        {
+            foreach (var classDeclarationSyntax in Classes)
+            {
+                var classSymbol = context.GetISymbol(classDeclarationSyntax);
+
+                if (classSymbol is null)
+                {
+                    continue;
+                }
+
+                foreach (var attributeData in classSymbol.GetAttributes())
+                {
+                    if (attributeData.AttributeClass?.Name == attributeName)
+                    {
+                        yield return (classDeclarationSyntax, classSymbol, attributeData.GetParamStringArrayValues());
+                    }
+                }
+            }
+        }
+
+
         public IEnumerable<(ClassDeclarationSyntax, IEnumerable<string>)> GetModels(Compilation compilation, string attributeName)
         {
             foreach (var classDeclarationSyntax in Classes)
@@ -38,12 +60,36 @@ namespace MusicClub.v3.SourceGenerators.Shared.Receivers
             }
         }
 
+        public IEnumerable<(ClassDeclarationSyntax, ISymbol, AttributeData)> GetClassDeclarationSyntaxWithAttributeData(GeneratorExecutionContext context, string attributeName)
+        {
+            foreach (var classDeclarationSyntax in Classes)
+            {
+                var classSymbol = context.GetISymbol(classDeclarationSyntax);
+
+                if (classSymbol is null)
+                {
+                    continue;
+                }
+
+                foreach (var attributeData in classSymbol.GetAttributes())
+                {
+                    if (attributeData.AttributeClass?.Name == attributeName)
+                    {
+                        yield return (classDeclarationSyntax, classSymbol, attributeData);
+                    }
+                }
+            }
+        }
+
+
         public IEnumerable<(ClassDeclarationSyntax, AttributeData)> GetClassDeclarationSyntaxWithAttributeData(Compilation compilation, string attributeName)
         {
             foreach (var classDeclarationSyntax in Classes)
             {
                 var semanticModel = compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
                 var classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax);
+
+
                 if (classSymbol is null)
                 {
                     continue;

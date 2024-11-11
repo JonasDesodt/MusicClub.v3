@@ -18,7 +18,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
         private static string GetISymbolName(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
         {
             return context.GetISymbol(syntaxNode).Name;
-        }
+        }  
 
         public static string GetRootNamespace(this GeneratorExecutionContext context)
         {
@@ -95,9 +95,8 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
         {
             foreach (var classDeclarationSyntax in classDeclarationSyntaxes)
             {
-                if (context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree).GetDeclaredSymbol(classDeclarationSyntax) is INamedTypeSymbol classSymbol)
                 {
-                    if (classSymbol.Name.EndsWith(suffix))
+                    if (context.GetISymbol(classDeclarationSyntax).Name.EndsWith(suffix))
                     {
                         if (/*classSymbol.ContainingNamespace != null && classSymbol.ContainingNamespace.Name*/ context.GetNamespace(classDeclarationSyntax) == context.GetRootNamespace()/*&& classSymbol.ContainingNamespace.IsGlobalNamespace*/)
                         {
@@ -151,10 +150,11 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
         public static IEnumerable<IPropertySymbol> GetInterfaceProperties(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclaration, string name = null)
         {
             // Get the symbol representing the class
-            var namedTypeSymbol = context.GetNamedTypeSymbol(classDeclaration);
+            //var namedTypeSymbol = context.GetNamedTypeSymbol(classDeclaration);
             // Enumerate through all implemented interfaces            
+            var symbol = context.GetISymbol(classDeclaration);
 
-            foreach (var interfaceSymbol in namedTypeSymbol.AllInterfaces.Where(i => name == null || i.Name == name)) //todo => limit to the iModel? 
+            foreach (var interfaceSymbol in (symbol as INamedTypeSymbol).AllInterfaces.Where(i => name == null || i.Name == name)) //todo => limit to the iModel? 
             {
                 // Get all members of the interface and filter to properties
                 foreach (var member in interfaceSymbol.GetMembers().OfType<IPropertySymbol>())
