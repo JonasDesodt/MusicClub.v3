@@ -1,6 +1,5 @@
 ﻿img, span {
-    /*    aspect-ratio: 3/2;*/
-    aspect-ratio: 1/1;
+    aspect-ratio: 3/2;
     max-width: 100%;
     object-fit: cover;
 }

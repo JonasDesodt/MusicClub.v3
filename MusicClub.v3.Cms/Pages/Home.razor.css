@@ -8,7 +8,9 @@ h2 {
 }
 
 h2 > ::deep img {
+    aspect-ratio: 1/1;
     border-radius: 50%;
+    width: 5em;
 }
     
     section {
@@ -19,11 +21,11 @@ h2 > ::deep img {
 }
 
     section:nth-of-type(odd) {
-        background-color: rgb(240,240,240);
+        background-color: rgb(255,255,255);
     }
 
     section:nth-of-type(even) {
-        background-color: rgb(240,240,240);
+        background-color: rgb(255,255,255);
     }
 
         section > a {

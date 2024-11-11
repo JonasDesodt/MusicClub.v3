@@ -10,6 +10,16 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 {
     public static class GenerationExecutionContextExtensions
     {
+        public static ISymbol GetISymbol(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
+        {
+            return context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree).GetDeclaredSymbol(syntaxNode);
+        }
+
+        private static string GetISymbolName(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
+        {
+            return context.GetISymbol(syntaxNode).Name;
+        }
+
         public static string GetRootNamespace(this GeneratorExecutionContext context)
         {
             context.AnalyzerConfigOptions.GlobalOptions.TryGetValue(GlobalOptions.RootNamespace, out var rootNamespace);
@@ -31,13 +41,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             return namespaceSymbol.ToDisplayString();
         }
 
-        private static string GetSyntaxNodeName(this GeneratorExecutionContext context, SyntaxNode syntaxNode)
-        {
-            var semanticModel = context.Compilation.GetSemanticModel(syntaxNode.SyntaxTree);
-            var symbol = semanticModel.GetDeclaredSymbol(syntaxNode);
 
-            return symbol.Name;
-        }
 
 
         public static string GetNamespace(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
@@ -47,7 +51,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 
         public static string GetClassName(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
         {
-            return GetSyntaxNodeName(context, classDeclarationSyntax as SyntaxNode);
+            return GetISymbolName(context, classDeclarationSyntax as SyntaxNode);
         }
 
         public static IEnumerable<string> GetTypeParameterNames(this GeneratorExecutionContext context, ClassDeclarationSyntax classDeclarationSyntax)
@@ -130,7 +134,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
 
         public static string GetInterfaceName(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
         {
-            return GetSyntaxNodeName(context, interfaceDeclarationSyntax as SyntaxNode);
+            return GetISymbolName(context, interfaceDeclarationSyntax as SyntaxNode);
         }
 
         public static IEnumerable<string> GetTypeParameterNames(this GeneratorExecutionContext context, InterfaceDeclarationSyntax interfaceDeclarationSyntax)
@@ -208,7 +212,7 @@ namespace MusicClub.v3.SourceGenerators.Shared.Extensions
             {
                 // Get the symbol for each member
                 var memberSymbol = semanticModel.GetDeclaredSymbol(member);
-                
+
                 if (memberSymbol is IMethodSymbol methodSymbol)
                 {
                     yield return (methodSymbol, methodSymbol.GetAttributes());
